@@ -12,7 +12,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         }
 
         return str;
-    }
+    };
 
     var display = new Display().initialize(document.getElementById('container'));
     console.log('Display created:\n' +
@@ -33,13 +33,13 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
             { name: 'hihat_open', filename: 'samples/open_hihat1.wav' },
             { name: 'snare1', filename: 'samples/snare1.wav' },
             { name: 'snare2', filename: 'samples/snare2.wav' },
-            { name: 'snare2', filename: 'samples/snare3.wav' },
+            { name: 'snare2', filename: 'samples/snare3.wav' }
         ],
         onSamplesLoaded)
     }
 
     var button;
-    function onSamplesLoaded(sampleBank) {
+    function onSamplesLoaded(/*sampleBank*/) {
         button.disabled = false;
     }
 
@@ -74,7 +74,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
 
     button.addEventListener('click', playPattern);
 
-    function createPattern(e) {
+    function createPattern() {
         var pattern = new Pattern();
         var track, sample;
         var i;
@@ -107,37 +107,9 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         sound.addPattern(pattern);
     }
 
-    function playPattern(e) {
+    function playPattern() {
         var pattern = sound.getPattern(0);
         sound.playPattern(pattern);
-//        var playbackRAF, timePerNote, currentNote = 0, lastTick = 0;
-//        var track, note, source;
-//
-//        if ( pattern ) {
-//            timePerNote = 60 / pattern.tempo * 100;
-//            playbackRAF = requestAnimationFrame(play);
-//
-//            function play(dt) {
-//                playbackRAF = requestAnimationFrame(play);
-//
-//                if ( dt - lastTick >= timePerNote ) {
-//                    // loop through the tracks
-//                    for ( var i = 0, numTracks = pattern.getTrackCount(); i < numTracks; i++ ) {
-//                        note = pattern.getTrack(i).getNote(currentNote);
-//                        if ( note ) {
-//                            source = createBufferNode(note);
-//                            if ( source ) {
-//                                source.noteOn(0);
-//                            }
-//                        }
-//                    }
-//                    currentNote++;
-//                    lastTick = dt;
-//                }
-//            }
-//        } else {
-//            alert('No Pattern to play');
-//        }
     }
 
-})
+});
