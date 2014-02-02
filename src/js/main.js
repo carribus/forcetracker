@@ -146,44 +146,4 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
 
         return source;
     }
-
-    function playDrums(e) {
-        var note = new Note();
-        note.noteName = Note.noteNames[Math.floor(Math.random()*Note.noteNames.length)];
-        note.octave = 3 + Math.floor(Math.random()*3);
-
-        var source = sound.context.createBufferSource();
-        source.buffer = sound.getSample('cymbal').buffer;
-        source.connect(sound.context.destination);
-        source.playbackRate.value = (note.getFrequency() / 440.0);
-        console.log(note.toString());
-        console.log(source.playbackRate.value);
-        source.noteOn(0);
-        console.log(sound.context.destination);
-
-        if ( note.getNoteName() == 'C' ) {
-            source = sound.context.createBufferSource();
-            source.buffer = sound.getSample('kick').buffer;
-            source.connect(sound.context.destination);
-            source.noteOn(0);
-        }
-//        source.frequency.value = note.getFrequency();
-
-//        oscillator = sound.context.createOscillator();
-//        oscillator.connect(sound.context.destination);
-//        oscillator.frequency.value = note.getFrequency();
-//        oscillator.noteOn(0);
-
-//        var intervalId = setInterval(function() {
-//            note.increment();
-//            if ( note.octave == 6 ) {
-//                clearInterval(intervalId);
-//                source.noteOff(0);
-//                return;
-//            }
-//            console.log('Playing %s', note.toString());
-//            source.noteOn(0);
-////            source.frequency.value = note.getFrequency();
-//        }, 250);
-    }
 })
