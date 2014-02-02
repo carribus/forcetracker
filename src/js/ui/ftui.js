@@ -3,7 +3,7 @@ define('ui/ftui', function() {
     function ftUI(display, soundSystem) {
         this.display = display;
         this.soundSystem = soundSystem;
-        this.margins = {left: 10, top: 100, right: 10, bottom: 10};
+        this.margins = {left: 200, top: 100, right: 10, bottom: 110};
         this.trackWidth = 120;
         this.fonts = {
             note: {
@@ -60,6 +60,7 @@ define('ui/ftui', function() {
         var margins = this.margins;
         var pattern = this.soundSystem.getPattern(0);
         var track, note, noteStr;
+        var visibleNotes = Math.floor(((display.height - margins.bottom) - margins.top) / this.fonts.note.size)-1;
 
         ctx.strokeStyle = 'rgb(128, 128, 128)';
         ctx.lineWidth = 0.5;
@@ -82,23 +83,50 @@ define('ui/ftui', function() {
                 ctx.lineTo(margins.left + i * this.trackWidth, display.height - margins.bottom);
 
                 // draw the notes
-                for ( var j = 0, maxNotes = pattern.getNotesPerTrack(); j < maxNotes; j++ ) {
+                var startNote = this.soundSystem.currentNote - visibleNotes;
+                var offset = 0;
+                startNote = startNote < 0 ? 0 : startNote;
+                for ( var j = startNote, maxNotes = pattern.getNotesPerTrack(); j < maxNotes; j++ ) {
                     // the note
                     //  NOTE:OCTAVE
                     //  VOLUME[00-FF]
+                    //  SAMPLE ID[00-FF]
+                    //  EFFECT
+
+                    offset = j - startNote;
+                    // fill the line's background
+                    if ( j == this.soundSystem.currentNote) {
+                        ctx.fillStyle = 'rgb(32, 32, 32)';
+                        ctx.fillRect(margins.left + i * this.trackWidth, margins.top + offset * this.fonts.note.size, this.trackWidth, this.fonts.note.size+2);
+                    } else {
+                        ctx.fillStyle = 'rgb(16, 16, 16)';
+                    }
 
                     note = track.getNote(j);
                     if ( note ) {
                         noteStr = note.getNoteName() + (note.isSharp ? '#' : '-') + note.octave + ' ' +
                                   (note.volume ? note.volume : '..') + ' ' +
-                                  '.. ' +
-                                  note.sampleID.pad(3);
-                        ctx.fillText(noteStr, margins.left + i * this.trackWidth + 7, margins.top + j * this.fonts.note.size);
+                                  note.sampleID.pad(2) + ' ' +
+                                  '...';
+                        if ( j == this.soundSystem.currentNote) {
+                            ctx.fillStyle = 'white';
+                        } else {
+                            ctx.fillStyle = 'rgb(164, 164, 164)';
+                        }
+                        ctx.fillText(noteStr, margins.left + i * this.trackWidth + 7, margins.top + offset * this.fonts.note.size);
                     } else {
-                        ctx.fillText('... .. .. ...', margins.left + i * this.trackWidth + 7, margins.top + j * this.fonts.note.size);
+                        ctx.fillStyle = 'rgb(128, 128, 128)';
+                        ctx.fillText('... .. .. ...', margins.left + i * this.trackWidth + 7, margins.top + offset * this.fonts.note.size);
+                    }
+
+                    if ( margins.top + offset * this.fonts.note.size + this.fonts.note.size*2 >= display.height - margins.bottom) {
+                        break;
                     }
                 }
             }
+            ctx.moveTo(margins.left + i * this.trackWidth, margins.top);
+            ctx.lineTo(margins.left + i * this.trackWidth, display.height - margins.bottom);
+
             ctx.stroke();
         }
     }

@@ -5,6 +5,11 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
         this.sampleBank = [];
         this.patterns = [];
 
+        this.currentPattern = null;
+        this.currentNote = 0;
+        this.playing = false;
+        this.lastTick = 0;
+
         try {
             window.AudioContext = window.AudioContext || window.webkitAudioContext;
             this.context = new AudioContext();
@@ -66,6 +71,49 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
 
     SoundSystem.prototype.getPattern = function(index) {
         return this.patterns[index];
+    }
+
+    SoundSystem.prototype.playPattern = function(pattern) {
+        if ( pattern && pattern instanceof Pattern) {
+            this.currentPattern = pattern;
+            this.playing = true;
+            this.currentNote = 0;
+        }
+    }
+
+    SoundSystem.prototype.onTick = function(dt) {
+        var pattern = this.currentPattern;
+        var timePerNote, track, note, source
+
+        if ( pattern && this.playing ) {
+            timePerNote = 60 / pattern.tempo * 100;
+            if ( dt - this.lastTick >= timePerNote ) {
+                // loop through the tracks
+                for ( var i = 0, numTracks = pattern.getTrackCount(); i < numTracks; i++ ) {
+                    note = pattern.getTrack(i).getNote(this.currentNote);
+                    if ( note ) {
+                        source = this._createBufferNode(note);
+                        if ( source ) {
+                            source.noteOn(0);
+                        }
+                    }
+                }
+                if ( this.currentNote < pattern.getNotesPerTrack() ) {
+                    this.currentNote++;
+                }
+
+                this.lastTick = dt;
+            }
+        }
+    }
+
+    SoundSystem.prototype._createBufferNode = function(note) {
+        var source = this.context.createBufferSource();
+        source.buffer = this.getSample(note.sampleID).buffer;
+        source.connect(this.context.destination);
+        source.playbackRate.value = (note.getFrequency() / 440.0);
+
+        return source;
     }
 
     return SoundSystem;

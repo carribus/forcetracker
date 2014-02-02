@@ -33,7 +33,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
             { name: 'hihat_open', filename: 'samples/open_hihat1.wav' },
             { name: 'snare1', filename: 'samples/snare1.wav' },
             { name: 'snare2', filename: 'samples/snare2.wav' },
-            { name: 'snare2', filename: 'samples/snare3.wav' }
+            { name: 'snare2', filename: 'samples/snare3.wav' },
         ],
         onSamplesLoaded)
     }
@@ -47,6 +47,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
 
     function update(dt) {
         window.requestAnimationFrame(update);
+        sound.onTick(dt);
         ui.render();
     }
 
@@ -79,13 +80,13 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         var i;
 
         pattern.setNotesPerTrack(64);
-        pattern.setTrackCount(3);
-        pattern.setTempo(90);
+        pattern.setTrackCount(4);
+        pattern.setTempo(125);
 
         // bass drum track
         sample = sound.getSample('kick');
         track = pattern.getTrack(0);
-        for ( i = 0; i < pattern.getNotesPerTrack(); i+=4 ) {
+        for ( i = 0; i < pattern.getNotesPerTrack(); i+=8 ) {
             track.setNote(i, new Note('C', false, 4, sample.index));
         }
 
@@ -100,7 +101,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         sample = sound.getSample('cymbal');
         track = pattern.getTrack(2);
         for ( i = 4; i < pattern.getNotesPerTrack(); i+= 8) {
-            track.setNote(i, new Note('C', false, 5, sample.index));
+            track.setNote(i, new Note('C', false, 4, sample.index));
         }
 
         sound.addPattern(pattern);
@@ -108,42 +109,35 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
 
     function playPattern(e) {
         var pattern = sound.getPattern(0);
-        var playbackRAF, timePerNote, currentNote = 0, lastTick = 0;
-        var track, note, source;
-
-        if ( pattern ) {
-            timePerNote = 60 / pattern.tempo * 100;
-            playbackRAF = requestAnimationFrame(play);
-
-            function play(dt) {
-                playbackRAF = requestAnimationFrame(play);
-
-                if ( dt - lastTick >= timePerNote ) {
-                    // loop through the tracks
-                    for ( var i = 0, numTracks = pattern.getTrackCount(); i < numTracks; i++ ) {
-                        note = pattern.getTrack(i).getNote(currentNote);
-                        if ( note ) {
-                            source = createBufferNode(note);
-                            if ( source ) {
-                                source.noteOn(0);
-                            }
-                        }
-                    }
-                    currentNote++;
-                    lastTick = dt;
-                }
-            }
-        } else {
-            alert('No Pattern to play');
-        }
+        sound.playPattern(pattern);
+//        var playbackRAF, timePerNote, currentNote = 0, lastTick = 0;
+//        var track, note, source;
+//
+//        if ( pattern ) {
+//            timePerNote = 60 / pattern.tempo * 100;
+//            playbackRAF = requestAnimationFrame(play);
+//
+//            function play(dt) {
+//                playbackRAF = requestAnimationFrame(play);
+//
+//                if ( dt - lastTick >= timePerNote ) {
+//                    // loop through the tracks
+//                    for ( var i = 0, numTracks = pattern.getTrackCount(); i < numTracks; i++ ) {
+//                        note = pattern.getTrack(i).getNote(currentNote);
+//                        if ( note ) {
+//                            source = createBufferNode(note);
+//                            if ( source ) {
+//                                source.noteOn(0);
+//                            }
+//                        }
+//                    }
+//                    currentNote++;
+//                    lastTick = dt;
+//                }
+//            }
+//        } else {
+//            alert('No Pattern to play');
+//        }
     }
 
-    function createBufferNode(note) {
-        var source = sound.context.createBufferSource();
-        source.buffer = sound.getSample(note.sampleID).buffer;
-        source.connect(sound.context.destination);
-        source.playbackRate.value = (note.getFrequency() / 440.0);
-
-        return source;
-    }
 })
