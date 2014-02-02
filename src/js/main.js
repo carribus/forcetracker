@@ -1,0 +1,189 @@
+require.config({
+    urlArgs: "bust=" + (new Date()).getTime()
+});
+
+require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/track', 'sound/note'], function(Display, ftUI, SoundSystem, Pattern, Track, Note) {
+    console.log('Force Tracker starting...');
+
+    Number.prototype.pad = function(toLength) {
+        var str = '' + this.valueOf();
+        for ( var i = str.length; i < toLength; i++ ) {
+            str = '0' + str;
+        }
+
+        return str;
+    }
+
+    var display = new Display().initialize(document.getElementById('container'));
+    console.log('Display created:\n' +
+        '\twidth: %s\n' +
+        '\theight: %s', display.width, display.height);
+
+    var sound = new SoundSystem();
+    var ui = new ftUI(display, sound);
+
+    if ( sound ) {
+        console.log('Sound System created:\n' +
+            '\tSample Rate: %s', sound.context.sampleRate);
+
+        sound.loadSamples([
+            { name: 'kick', filename: 'samples/kick.wav' },
+            { name: 'cymbal', filename: 'samples/cymbal.wav' },
+            { name: 'hihat_closed', filename: 'samples/closed_hihat1.wav' },
+            { name: 'hihat_open', filename: 'samples/open_hihat1.wav' },
+            { name: 'snare1', filename: 'samples/snare1.wav' },
+            { name: 'snare2', filename: 'samples/snare2.wav' },
+            { name: 'snare2', filename: 'samples/snare3.wav' }
+        ],
+        onSamplesLoaded)
+    }
+
+    var button;
+    function onSamplesLoaded(sampleBank) {
+        button.disabled = false;
+    }
+
+    window.requestAnimationFrame(update);
+
+    function update(dt) {
+        window.requestAnimationFrame(update);
+        ui.render();
+    }
+
+    // create a temporary button
+    button = document.createElement('button');
+    button.innerHTML = 'Create Pattern';
+    button.style.position = 'absolute';
+    button.style.left = '10px';
+    button.style.top = '20px';
+    button.style.width = '100px';
+    button.style.height = '50px';
+    document.body.appendChild(button);
+    button.addEventListener('click', createPattern);
+
+    button = document.createElement('button');
+    button.innerHTML = 'Play';
+    button.style.position = 'absolute';
+    button.style.left = '120px';
+    button.style.top = '20px';
+    button.style.width = '100px';
+    button.style.height = '50px';
+    button.disabled = true;
+    document.body.appendChild(button);
+
+    button.addEventListener('click', playPattern);
+
+    function createPattern(e) {
+        var pattern = new Pattern();
+        var track, sample;
+        var i;
+
+        pattern.setNotesPerTrack(64);
+        pattern.setTrackCount(3);
+        pattern.setTempo(90);
+
+        // bass drum track
+        sample = sound.getSample('kick');
+        track = pattern.getTrack(0);
+        for ( i = 0; i < pattern.getNotesPerTrack(); i+=4 ) {
+            track.setNote(i, new Note('C', false, 4, sample.index));
+        }
+
+        // hihat track
+        sample = sound.getSample('hihat_closed');
+        track = pattern.getTrack(1);
+        for ( i = 0; i < pattern.getNotesPerTrack(); i+=2) {
+            track.setNote(i, new Note('C', false, 5, sample.index));
+        }
+
+        // cymbal track
+        sample = sound.getSample('cymbal');
+        track = pattern.getTrack(2);
+        for ( i = 4; i < pattern.getNotesPerTrack(); i+= 8) {
+            track.setNote(i, new Note('C', false, 5, sample.index));
+        }
+
+        sound.addPattern(pattern);
+    }
+
+    function playPattern(e) {
+        var pattern = sound.getPattern(0);
+        var playbackRAF, timePerNote, currentNote = 0, lastTick = 0;
+        var track, note, source;
+
+        if ( pattern ) {
+            timePerNote = 60 / pattern.tempo * 100;
+            playbackRAF = requestAnimationFrame(play);
+
+            function play(dt) {
+                playbackRAF = requestAnimationFrame(play);
+
+                if ( dt - lastTick >= timePerNote ) {
+                    // loop through the tracks
+                    for ( var i = 0, numTracks = pattern.getTrackCount(); i < numTracks; i++ ) {
+                        note = pattern.getTrack(i).getNote(currentNote);
+                        if ( note ) {
+                            source = createBufferNode(note);
+                            if ( source ) {
+                                source.noteOn(0);
+                            }
+                        }
+                    }
+                    currentNote++;
+                    lastTick = dt;
+                }
+            }
+        } else {
+            alert('No Pattern to play');
+        }
+    }
+
+    function createBufferNode(note) {
+        var source = sound.context.createBufferSource();
+        source.buffer = sound.getSample(note.sampleID).buffer;
+        source.connect(sound.context.destination);
+        source.playbackRate.value = (note.getFrequency() / 440.0);
+
+        return source;
+    }
+
+    function playDrums(e) {
+        var note = new Note();
+        note.noteName = Note.noteNames[Math.floor(Math.random()*Note.noteNames.length)];
+        note.octave = 3 + Math.floor(Math.random()*3);
+
+        var source = sound.context.createBufferSource();
+        source.buffer = sound.getSample('cymbal').buffer;
+        source.connect(sound.context.destination);
+        source.playbackRate.value = (note.getFrequency() / 440.0);
+        console.log(note.toString());
+        console.log(source.playbackRate.value);
+        source.noteOn(0);
+        console.log(sound.context.destination);
+
+        if ( note.getNoteName() == 'C' ) {
+            source = sound.context.createBufferSource();
+            source.buffer = sound.getSample('kick').buffer;
+            source.connect(sound.context.destination);
+            source.noteOn(0);
+        }
+//        source.frequency.value = note.getFrequency();
+
+//        oscillator = sound.context.createOscillator();
+//        oscillator.connect(sound.context.destination);
+//        oscillator.frequency.value = note.getFrequency();
+//        oscillator.noteOn(0);
+
+//        var intervalId = setInterval(function() {
+//            note.increment();
+//            if ( note.octave == 6 ) {
+//                clearInterval(intervalId);
+//                source.noteOff(0);
+//                return;
+//            }
+//            console.log('Playing %s', note.toString());
+//            source.noteOn(0);
+////            source.frequency.value = note.getFrequency();
+//        }, 250);
+    }
+})
