@@ -9,7 +9,7 @@ define('display', function() {
     }
 
     Display.prototype.initialize = function(parentElem) {
-        this.parentElem = parentElem || document.body();
+        this.parentElem = parentElem || document.body;
         this.canvas = document.createElement('canvas');
         this.canvas.width = this.width = window.innerWidth;
         this.canvas.height = this.height = window.innerHeight;

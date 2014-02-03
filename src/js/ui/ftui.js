@@ -12,10 +12,46 @@ define('ui/ftui', function() {
                 weight: 'normal'
             }
         }
+        this.controls = {
+            createPatternButton: null,
+            playPatternButton: null,
+            tempoTextField: null,
+            applyTempoButton: null
+        }
+
+        this._createUIElements();
+    }
+
+    ftUI.prototype._createUIElements = function() {
+        var o;
+
+        var createElement = function(type, text, x, y, w, h) {
+            var e = document.createElement(type);
+            e.innerHTML = text;
+            e.style.position = 'absolute';
+            e.style.left = x + 'px';
+            e.style.top = y + 'px';
+            e.style.width = w + 'px';
+            e.style.height = h + 'px';
+            document.body.appendChild(e);
+
+            return e;
+        }
+
+        this.controls.createPatternButton = createElement('button', 'Create Pattern', 10, 20, 100, 50);
+        this.controls.playPatternButton = createElement('button', 'Play Pattern', 120, 20, 100, 50);
+        this.controls.tempoTextField = createElement('input', null, 250, 20, 50, 16);
+        this.controls.tempoTextField.type = 'text';
+        this.controls.applyTempoButton = createElement('button', 'Apply Tempo', 310, 20, 100, 22);
     }
 
     ftUI.prototype.render = function() {
         if ( this.display) {
+            var pattern = this.soundSystem.getPattern(0);
+            if ( pattern ) {
+                this.controls.tempoTextField.value = pattern.tempo;
+            }
+
             drawTracker.call(this);
         } else {
             console.error('No display object available during render');

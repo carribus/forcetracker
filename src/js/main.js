@@ -14,7 +14,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         return str;
     };
 
-    var display = new Display().initialize(document.getElementById('container'));
+    var display = new Display().initialize();
     console.log('Display created:\n' +
         '\twidth: %s\n' +
         '\theight: %s', display.width, display.height);
@@ -38,9 +38,8 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         onSamplesLoaded)
     }
 
-    var button;
     function onSamplesLoaded(/*sampleBank*/) {
-        button.disabled = false;
+        ui.controls.playPatternButton.disabled = false;
     }
 
     window.requestAnimationFrame(update);
@@ -51,6 +50,10 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         ui.render();
     }
 
+    ui.controls.createPatternButton.addEventListener('click', createPattern);
+    ui.controls.playPatternButton.addEventListener('click', playPattern);
+    ui.controls.applyTempoButton.addEventListener('click', applyTempo);
+/*
     // create a temporary button
     button = document.createElement('button');
     button.innerHTML = 'Create Pattern';
@@ -73,7 +76,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     document.body.appendChild(button);
 
     button.addEventListener('click', playPattern);
-
+*/
     function createPattern() {
         var pattern = new Pattern();
         var track, sample;
@@ -109,7 +112,16 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
 
     function playPattern() {
         var pattern = sound.getPattern(0);
-        sound.playPattern(pattern);
+        if ( pattern ) {
+            sound.playPattern(pattern);
+        }
+    }
+
+    function applyTempo() {
+        var pattern = sound.getPattern(0);
+        if ( pattern ) {
+            pattern.setTempo(parseInt(ui.controls.tempoTextField.value));
+        }
     }
 
 });
