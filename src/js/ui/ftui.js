@@ -3,7 +3,7 @@ define('ui/ftui', function() {
     function ftUI(display, soundSystem) {
         this.display = display;
         this.soundSystem = soundSystem;
-        this.margins = {left: 200, top: 100, right: 10, bottom: 110};
+        this.margins = {left: 250, top: 100, right: 10, bottom: 110};
         this.trackWidth = 120;
         this.fonts = {
             note: {
@@ -41,15 +41,14 @@ define('ui/ftui', function() {
         this.controls.createPatternButton = createElement('button', 'Create Pattern', 10, 20, 100, 50);
         this.controls.playPatternButton = createElement('button', 'Play Pattern', 120, 20, 100, 50);
         this.controls.tempoTextField = createElement('input', null, 250, 20, 50, 16);
-        this.controls.tempoTextField.type = 'text';
         this.controls.applyTempoButton = createElement('button', 'Apply Tempo', 310, 20, 100, 22);
     }
 
     ftUI.prototype.render = function() {
         if ( this.display) {
             var pattern = this.soundSystem.getPattern(0);
-            if ( pattern ) {
-                this.controls.tempoTextField.value = pattern.tempo;
+            if ( pattern && this.controls.tempoTextField.value.length == 0 ) {
+                this.controls.tempoTextField.value = pattern.tempo.toString();
             }
 
             drawTracker.call(this);

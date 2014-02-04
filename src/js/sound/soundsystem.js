@@ -4,6 +4,7 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
         this.context = null;
         this.sampleBank = [];
         this.patterns = [];
+        this.trackRoutes = null;
 
         this.currentPattern = null;
         this.currentNote = 0;
@@ -76,8 +77,10 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
     SoundSystem.prototype.playPattern = function(pattern) {
         if ( pattern && pattern instanceof Pattern) {
             this.currentPattern = pattern;
-            this.playing = true;
+            this._configureRouting();
             this.currentNote = 0;
+
+            this.playing = true;
         }
     }
 
@@ -92,8 +95,11 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
                 for ( var i = 0, numTracks = pattern.getTrackCount(); i < numTracks; i++ ) {
                     note = pattern.getTrack(i).getNote(this.currentNote);
                     if ( note ) {
+                        // if we have a note to play, do it
                         source = this._createBufferNode(note);
                         if ( source ) {
+                            // connect the node to the appropriate channel's gainNode
+                            source.connect(this.trackRoutes[i].gain);
                             source.noteOn(0);
                         }
                     }
@@ -107,14 +113,83 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
         }
     }
 
+    /**
+     * Creates a BufferSource node from a pre-loaded audio sample and ensures that its playback is done at the requested
+     * frequency (specified by the note)
+     * @param note
+     * @returns {*}
+     * @private
+     */
     SoundSystem.prototype._createBufferNode = function(note) {
         var source = this.context.createBufferSource();
         source.buffer = this.getSample(note.sampleID).buffer;
-        source.connect(this.context.destination);
+//        source.connect(this.context.destination);
         source.playbackRate.value = (note.getFrequency() / 440.0);
 
         return source;
     }
+
+    /**
+     * Configures AudioNode routing for the current pattern
+     *
+     * Each track has the following DEFAULT routing:
+     *
+     *  GainNode -> PannerNode -> AnalyserNode -> destination
+     *
+     * When the track plays, the source of each note will be connected to the GainNode
+     *
+     * @private
+     */
+    SoundSystem.prototype._configureRouting = function() {
+        var volNode, pannerNode, analyserNode;
+
+        if ( this.currentPattern ) {
+            var numTracks = this.currentPattern.getTrackCount();
+
+            if ( !this.trackRoutes || numTracks != this.trackRoutes.length ) {
+                console.log('Reconfiguring routing for pattern')
+                this._clearRouting();
+                this.trackRoutes = [];
+                for ( var i = 0; i < numTracks; i++ ) {
+                    volNode = this._createVolumeNode();
+                    pannerNode = this._createPannerNode();
+                    analyserNode = this._createAnalyserNode();
+                    volNode.connect(pannerNode);
+                    pannerNode.connect(analyserNode);
+                    analyserNode.connect(this.context.destination);
+                    this.trackRoutes[i] = {
+                        gain: volNode,
+                        panner: pannerNode,
+                        analyser: analyserNode
+                    };
+                }
+            } else {
+                console.log('Routing for pattern stays the same');
+            }
+        }
+    }
+
+    SoundSystem.prototype._clearRouting = function() {
+        if ( this.trackRoutes && this.trackRoutes.length ) {
+            console.log('Clearing %s track routes', this.trackRoutes.length);
+            for ( var i = 0, len = this.trackRoutes.length; i < len; i++ ) {
+                this.trackRoutes[i].gain.disconnect();
+                this.trackRoutes[i].panner.disconnect();
+                this.trackRoutes[i].analyser.disconnect();
+            }
+        }
+    }
+
+    SoundSystem.prototype._createVolumeNode = function() {
+        return this.context.createGainNode();
+    }
+    SoundSystem.prototype._createPannerNode = function() {
+        return this.context.createPanner();
+    }
+    SoundSystem.prototype._createAnalyserNode = function() {
+        return this.context.createAnalyser();
+    }
+
 
     return SoundSystem;
 })

@@ -53,37 +53,14 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     ui.controls.createPatternButton.addEventListener('click', createPattern);
     ui.controls.playPatternButton.addEventListener('click', playPattern);
     ui.controls.applyTempoButton.addEventListener('click', applyTempo);
-/*
-    // create a temporary button
-    button = document.createElement('button');
-    button.innerHTML = 'Create Pattern';
-    button.style.position = 'absolute';
-    button.style.left = '10px';
-    button.style.top = '20px';
-    button.style.width = '100px';
-    button.style.height = '50px';
-    document.body.appendChild(button);
-    button.addEventListener('click', createPattern);
 
-    button = document.createElement('button');
-    button.innerHTML = 'Play';
-    button.style.position = 'absolute';
-    button.style.left = '120px';
-    button.style.top = '20px';
-    button.style.width = '100px';
-    button.style.height = '50px';
-    button.disabled = true;
-    document.body.appendChild(button);
-
-    button.addEventListener('click', playPattern);
-*/
     function createPattern() {
         var pattern = new Pattern();
         var track, sample;
         var i;
 
         pattern.setNotesPerTrack(64);
-        pattern.setTrackCount(4);
+        pattern.setTrackCount(3);
         pattern.setTempo(125);
 
         // bass drum track
