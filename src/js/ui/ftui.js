@@ -38,8 +38,11 @@ define('ui/ftui', function() {
             return e;
         }
 
-        this.controls.createPatternButton = createElement('button', 'Create Pattern', 10, 20, 100, 50);
-        this.controls.playPatternButton = createElement('button', 'Play Pattern', 120, 20, 100, 50);
+        this.controls.createPatternButton = createElement('button', 'Create Drum Pattern', 10, 20, 100, 50);
+        this.controls.playPatternButton = createElement('button', 'Play the Shizzle!', 120, 20, 120, 25);
+        this.controls.playPatternButton.disabled = true;
+        this.controls.stopPatternButton = createElement('button', 'Stop the Nizzle!', 120, 45, 120, 25);
+        this.controls.stopPatternButton.disabled = true;
         this.controls.tempoTextField = createElement('input', null, 250, 20, 50, 16);
         this.controls.applyTempoButton = createElement('button', 'Apply Tempo', 310, 20, 100, 22);
     }

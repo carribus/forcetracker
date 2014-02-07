@@ -39,7 +39,6 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     }
 
     function onSamplesLoaded(/*sampleBank*/) {
-        ui.controls.playPatternButton.disabled = false;
     }
 
     window.requestAnimationFrame(update);
@@ -52,6 +51,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
 
     ui.controls.createPatternButton.addEventListener('click', createPattern);
     ui.controls.playPatternButton.addEventListener('click', playPattern);
+    ui.controls.stopPatternButton.addEventListener('click', stopPattern);
     ui.controls.applyTempoButton.addEventListener('click', applyTempo);
 
     function createPattern() {
@@ -60,7 +60,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         var i;
 
         pattern.setNotesPerTrack(64);
-        pattern.setTrackCount(3);
+        pattern.setTrackCount(4);
         pattern.setTempo(125);
 
         // bass drum track
@@ -84,14 +84,31 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
             track.setNote(i, new Note('C', false, 4, sample.index));
         }
 
+        // snare track
+        sample = sound.getSample('snare1');
+        track = pattern.getTrack(3);
+        for ( i = 8; i < pattern.getNotesPerTrack(); i+= 16) {
+            track.setNote(i, new Note('C', false, 3, sample.index));
+        }
+
         sound.addPattern(pattern);
+
+        ui.controls.playPatternButton.disabled = false;
     }
 
     function playPattern() {
         var pattern = sound.getPattern(0);
         if ( pattern ) {
             sound.playPattern(pattern);
+            ui.controls.playPatternButton.disabled = true;
+            ui.controls.stopPatternButton.disabled = false;
         }
+    }
+
+    function stopPattern() {
+        sound.playing = false;
+        ui.controls.stopPatternButton.disabled = true;
+        ui.controls.playPatternButton.disabled = false;
     }
 
     function applyTempo() {
