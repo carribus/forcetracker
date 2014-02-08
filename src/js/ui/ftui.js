@@ -1,8 +1,9 @@
-define('ui/ftui', function() {
+define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor'], function(InputHandler, PatternEditor) {
 
     function ftUI(display, soundSystem) {
         this.display = display;
         this.soundSystem = soundSystem;
+        this.inputHandler = new InputHandler(this);
         this.margins = {left: 250, top: 100, right: 10, bottom: 110};
         this.trackWidth = 120;
         this.fonts = {
@@ -20,8 +21,13 @@ define('ui/ftui', function() {
         }
 
         this._createUIElements();
+        this._registerInputHandlers();
     }
 
+    /**
+     *
+     * @private
+     */
     ftUI.prototype._createUIElements = function() {
         var o;
 
@@ -45,6 +51,16 @@ define('ui/ftui', function() {
         this.controls.stopPatternButton.disabled = true;
         this.controls.tempoTextField = createElement('input', null, 250, 20, 50, 16);
         this.controls.applyTempoButton = createElement('button', 'Apply Tempo', 310, 20, 100, 22);
+    }
+
+    /**
+     * Registers event listeners for input events
+     * @private
+     */
+    ftUI.prototype._registerInputHandlers = function() {
+        this.display.canvas.addEventListener('mousedown', this.inputHandler.onMouseDown);
+        window.addEventListener('keydown', this.inputHandler.onKeyDown);
+        window.addEventListener('keyup', this.inputHandler.onKeyUp);
     }
 
     ftUI.prototype.render = function() {
@@ -169,5 +185,7 @@ define('ui/ftui', function() {
         }
     }
 
+
+
     return ftUI;
-})
+});

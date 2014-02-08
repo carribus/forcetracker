@@ -14,12 +14,16 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         return str;
     };
 
+    // create the display object
     var display = new Display().initialize();
     console.log('Display created:\n' +
         '\twidth: %s\n' +
         '\theight: %s', display.width, display.height);
 
+    // create the sound system
     var sound = new SoundSystem();
+
+    // create the ui
     var ui = new ftUI(display, sound);
 
     if ( sound ) {
