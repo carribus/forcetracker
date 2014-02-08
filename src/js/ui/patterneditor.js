@@ -172,14 +172,10 @@ define('ui/patterneditor', ['ui/inputhandler'], function(InputHandler) {
                     }
                 }
 
-//                startNote = (isPlaying ? currentNote : this.editPosition.note) - visibleNotes + 1;
-//                startNote = startNote < 0 ? 0 : startNote;
-
                 if ( isPlaying ) {
                     this._ensureNoteIsVisible(0, currentNote);
                 }
                 for ( var j = 0, maxNotes = pattern.getNotesPerTrack(); j < maxNotes; j++ ) {
-//                for ( var j = startNote, maxNotes = pattern.getNotesPerTrack(); j < maxNotes; j++ ) {
                     // the note
                     //  NOTE:OCTAVE
                     //  VOLUME[00-FF]
@@ -190,8 +186,6 @@ define('ui/patterneditor', ['ui/inputhandler'], function(InputHandler) {
                     if ( j < this.scrollOffset.y ) continue;
 
                     offset = j - this.scrollOffset.y;
-//                    offset = j;
-//                    offset = j - startNote;
                     // fill the line's background
                     if ( j == currentNote) {
                         ctx.fillStyle = this.colours.playingNoteFill;
