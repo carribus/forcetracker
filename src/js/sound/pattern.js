@@ -52,5 +52,14 @@ define('sound/pattern', ['sound/track'], function(Track) {
         return this.tempo;
     }
 
+    Pattern.prototype.deleteNote = function(trackIndex, noteIndex, shiftUp) {
+        var track = this.getTrack(trackIndex);
+        var note;
+
+        if ( track ) {
+            track.deleteNote(noteIndex, shiftUp);
+        }
+    }
+
     return Pattern;
 })

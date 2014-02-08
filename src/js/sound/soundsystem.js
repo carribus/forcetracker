@@ -106,6 +106,8 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
                 }
                 if ( this.currentNote < pattern.getNotesPerTrack() ) {
                     this.currentNote++;
+                } else {
+                    this.playing = false;
                 }
 
                 this.lastTick = dt;

@@ -20,5 +20,11 @@ define('sound/track', function() {
         this.notes[index] = note;
     }
 
+    Track.prototype.deleteNote = function(index, shiftUp) {
+        if ( !shiftUp ) {
+            this.setNote(index, null);
+        }
+    }
+
     return Track;
 })

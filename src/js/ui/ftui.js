@@ -54,8 +54,21 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor'], function(InputHandler
      */
     ftUI.prototype._registerInputHandlers = function() {
         this.display.canvas.addEventListener('mousedown', this.inputHandler.onMouseDown);
+        this.display.canvas.addEventListener('mousewheel', this.inputHandler.onWheel);
         window.addEventListener('keydown', this.inputHandler.onKeyDown);
         window.addEventListener('keyup', this.inputHandler.onKeyUp);
+    }
+
+    ftUI.prototype._playPattern = function() {
+        var pattern = this.soundSystem.getPattern(0);
+        if ( pattern ) {
+            if ( !this.soundSystem.playing ) {
+                this.soundSystem.playPattern(pattern);
+                this.controls.stopPatternButton.disabled = false;
+            } else {
+                this.soundSystem.playing = false;
+            }
+        }
     }
 
     ftUI.prototype.render = function() {
@@ -87,7 +100,7 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor'], function(InputHandler
         ctx.fillStyle = 'white';
         ctx.fillText(str, 200, 10);
 
-        this.controls.patternEditor.render(pattern, this.soundSystem.currentNote);
+        this.controls.patternEditor.render(pattern, this.soundSystem.currentNote, this.soundSystem.playing);
 
         ctx.restore();
     }
