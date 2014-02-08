@@ -1,10 +1,11 @@
-define('ui/patterneditor', function() {
+define('ui/patterneditor', ['ui/inputhandler'], function(InputHandler) {
 
     function PatternEditor(display, dimensions) {
         this.display = display;
         this.dimensions = dimensions;
         this.trackWidth = 120;
         this.rect = null;
+        this.pattern = null;
         this.fonts = {
             note: {
                 name: 'Courier New',
@@ -22,9 +23,8 @@ define('ui/patterneditor', function() {
             emptyNoteText: 'rgb(128, 128, 128)'
         }
         this.editPosition = {
-            track: -1,
-            note: -1
-
+            track: 0,
+            note: 0
         }
         this.noteHeight = this.fonts.note.size;
     }
@@ -44,8 +44,38 @@ define('ui/patterneditor', function() {
         this.editPosition.note = noteNumber;
     }
 
+    PatternEditor.prototype.onKeyDown = function(e) {
+        switch (e.keyCode) {
+            case    InputHandler.KEYS.VK_LEFT:
+                if ( this.editPosition.track > 0 )
+                    this.editPosition.track--;
+                break;
+
+            case    InputHandler.KEYS.VK_RIGHT:
+                if ( this.pattern && (this.editPosition.track < this.pattern.getTrackCount()-1) ) {
+                    this.editPosition.track++;
+                }
+                break;
+
+            case    InputHandler.KEYS.VK_UP:
+                if ( this.editPosition.note > 0 ) {
+                    this.editPosition.note--;
+                }
+                break;
+
+            case    InputHandler.KEYS.VK_DOWN:
+                if ( this.pattern && (this.editPosition.note < this.pattern.getNotesPerTrack()-1) ) {
+                    this.editPosition.note++;
+                }
+                break;
+        }
+    }
+
     PatternEditor.prototype.render = function(pattern, currentNote) {
         var rect, ctx;
+
+        this.pattern = pattern;
+
         if ( this.display ) {
             ctx = this.display.context;
             this.rect = rect = this._calcRect();

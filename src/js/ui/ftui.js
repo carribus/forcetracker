@@ -4,6 +4,7 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor'], function(InputHandler
         this.display = display;
         this.soundSystem = soundSystem;
         this.inputHandler = new InputHandler(this);
+        this.focusControl = null;
         this.margins = {left: 250, top: 100, right: 10, bottom: 110};
         this.controls = {
             patternEditor: null,
