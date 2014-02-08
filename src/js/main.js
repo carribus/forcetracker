@@ -104,7 +104,6 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         var pattern = sound.getPattern(0);
         if ( pattern ) {
             sound.playPattern(pattern);
-            ui.controls.playPatternButton.disabled = true;
             ui.controls.stopPatternButton.disabled = false;
         }
     }
@@ -112,7 +111,6 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     function stopPattern() {
         sound.playing = false;
         ui.controls.stopPatternButton.disabled = true;
-        ui.controls.playPatternButton.disabled = false;
     }
 
     function applyTempo() {

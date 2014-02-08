@@ -8,6 +8,9 @@ define('ui/inputhandler', [], function() {
 
             console.log('InputHandler: onMouseDown: %s', e.button);
             if (e.button == 0) { // left click
+                if ( ui.controls.patternEditor.containsPoint(e.clientX, e.clientY) ) {
+                    ui.controls.patternEditor.onClick(e.clientX, e.clientY);
+                }
             }
         }
 
