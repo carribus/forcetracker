@@ -46,6 +46,8 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor'], function(InputHandler
         this.controls.stopPatternButton.disabled = true;
         this.controls.tempoTextField = createElement('input', null, 250, 20, 50, 16);
         this.controls.applyTempoButton = createElement('button', 'Apply Tempo', 310, 20, 100, 22);
+
+        this.focusControl = this.controls.patternEditor;
     }
 
     /**
