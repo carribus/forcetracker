@@ -12,7 +12,21 @@ define('ui/patterneditor', function() {
                 weight: 'normal'
             }
         }
+        this.colours = {
+            defaultText: 'rgb(164, 164, 164)',
+            playingNoteText: 'white',
+            playingNoteFill: 'rgb(32, 32, 32)',
+            editNoteText: 'rgb(164, 255, 164)',
+            editNoteFill: 'rgb(16, 64, 16)',
+            editEmptyNoteText: 'rgb(128, 192, 128)',
+            emptyNoteText: 'rgb(128, 128, 128)'
+        }
+        this.editPosition = {
+            track: -1,
+            note: -1
 
+        }
+        this.noteHeight = this.fonts.note.size;
     }
 
     PatternEditor.prototype.containsPoint = function(x, y) {
@@ -20,8 +34,14 @@ define('ui/patterneditor', function() {
     }
 
     PatternEditor.prototype.onClick = function(x, y) {
-        // TODO: You left off here. Need to calculate which track and corresponding note was clicked.
         console.log('Pattern Editor clicked');
+        var trackNumber = Math.floor((x - this.rect.x) / this.trackWidth);
+        var noteNumber = Math.floor((y - this.rect.y) / this.noteHeight);
+
+        console.log('Click: Track %s, Note %s', trackNumber, noteNumber);
+
+        this.editPosition.track = trackNumber;
+        this.editPosition.note = noteNumber;
     }
 
     PatternEditor.prototype.render = function(pattern, currentNote) {
@@ -42,6 +62,7 @@ define('ui/patterneditor', function() {
     PatternEditor.prototype._drawPattern = function(ctx, rect, pattern, currentNote) {
         var track, note, noteStr;
         var visibleNotes = Math.floor((rect.h / this.fonts.note.size)-1);
+        var editedNote;
 
         ctx.strokeStyle = 'rgb(128, 128, 128)';
         ctx.lineWidth = 0.5;
@@ -73,12 +94,19 @@ define('ui/patterneditor', function() {
                     //  VOLUME[00-FF]
                     //  SAMPLE ID[00-FF]
                     //  EFFECT
+                    editedNote = ( i == this.editPosition.track && j == this.editPosition.note );
 
                     offset = j - startNote;
                     // fill the line's background
                     if ( j == currentNote) {
-                        ctx.fillStyle = 'rgb(32, 32, 32)';
-                        ctx.fillRect(rect.x + i * this.trackWidth, rect.y + offset * this.fonts.note.size, this.trackWidth, this.fonts.note.size+2);
+                        ctx.fillStyle = this.colours.playingNoteFill;
+                        ctx.fillRect(rect.x + i * this.trackWidth, rect.y + offset * this.fonts.note.size, this.trackWidth, this.noteHeight);
+                    }
+
+                    // check if the current note in the current track is being edited
+                    if ( editedNote ) {
+                        ctx.fillStyle = this.colours.editNoteFill;
+                        ctx.fillRect(rect.x + i * this.trackWidth, rect.y + offset * this.fonts.note.size, this.trackWidth, this.noteHeight);
                     }
 
                     note = track.getNote(j);
@@ -88,13 +116,21 @@ define('ui/patterneditor', function() {
                             note.sampleID.pad(2) + ' ' +
                             '...';
                         if ( j == currentNote) {
-                            ctx.fillStyle = 'white';
+                            ctx.fillStyle = this.colours.playingNoteText;
                         } else {
-                            ctx.fillStyle = 'rgb(164, 164, 164)';
+                            if ( editedNote ) {
+                                ctx.fillStyle = this.colours.editNoteText;
+                            } else {
+                                ctx.fillStyle = this.colours.defaultText;
+                            }
                         }
                         ctx.fillText(noteStr, rect.x + i * this.trackWidth + 7, rect.y + offset * this.fonts.note.size);
                     } else {
-                        ctx.fillStyle = 'rgb(128, 128, 128)';
+                        if ( editedNote ) {
+                            ctx.fillStyle = this.colours.editEmptyNoteText;
+                        } else {
+                            ctx.fillStyle = this.colours.emptyNoteText;
+                        }
                         ctx.fillText('... .. .. ...', rect.x + i * this.trackWidth + 7, rect.y + offset * this.fonts.note.size);
                     }
 
