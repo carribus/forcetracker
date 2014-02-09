@@ -30,7 +30,6 @@ define('ui/inputhandler', [], function() {
         }
 
         this.onKeyUp = function(e) {
-            console.log('InputHandler: onKeyUp: %s', e.keyCode);
         }
 
     }

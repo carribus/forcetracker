@@ -100,6 +100,7 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
                         if ( source ) {
                             // connect the node to the appropriate channel's gainNode
                             source.connect(this.trackRoutes[i].gain);
+                            this.trackRoutes[i].gain.gain.value = (note.volume ? note.volume : 255) / 255;
                             source.noteOn(0);
                         }
                     }

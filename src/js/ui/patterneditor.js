@@ -6,6 +6,7 @@ define('ui/patterneditor', ['ui/inputhandler', 'sound/note'], function(InputHand
         this.trackWidth = 120;
         this.rect = null;
         this.pattern = null;
+        this.lastSampleID = 0;
         this.scrollOffset = {
             x: 0,
             y: 0
@@ -120,7 +121,15 @@ define('ui/patterneditor', ['ui/inputhandler', 'sound/note'], function(InputHand
                     case    1:
                     case    2:
                         if ( InputHandler.isNoteKey(e.keyCode) ) {
-                            this.pattern.setNote(this.editPosition.track, this.editPosition.note, new Note(String.fromCharCode(e.keyCode), e.getModifierState('Shift'), 4, 1));
+                            note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
+                            if ( !note ) {
+                                note = new Note(String.fromCharCode(e.keyCode), e.getModifierState('Shift'), 4, this.lastSampleID);
+                            } else {
+                                note.noteName = String.fromCharCode(e.keyCode);
+                                note.isSharp = e.getModifierState('Shift');
+                            }
+
+                            this.pattern.setNote(this.editPosition.track, this.editPosition.note, note);
                         }
                         if ( "0123456789".indexOf(String.fromCharCode(e.keyCode)) != -1 ) {
                             note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
@@ -140,12 +149,11 @@ define('ui/patterneditor', ['ui/inputhandler', 'sound/note'], function(InputHand
                             if ( note ) {
                                 if ( this.editPosition.position == 4 ) {
                                     volume = parseInt(char + '0', 16) | note.volume & 0x0F;
+                                    this.editPosition.position++;
                                 } else if ( this.editPosition.position == 5 ) {
                                     volume = parseInt(char, 16) | note.volume & 0xF0;
-                                    this.editPosition.position++;
                                 }
                                 note.volume = volume;
-                                this.editPosition.position++;
                             }
                         }
                         break;
@@ -164,7 +172,7 @@ define('ui/patterneditor', ['ui/inputhandler', 'sound/note'], function(InputHand
                                     sample = parseInt(char, 16) | note.sampleID & 0xF0;
                                     this.editPosition.position++;
                                 }
-                                note.sampleID = sample;
+                                this.lastSampleID = note.sampleID = sample;
                                 this.editPosition.position++;
                             }
                         }
@@ -194,8 +202,6 @@ define('ui/patterneditor', ['ui/inputhandler', 'sound/note'], function(InputHand
         if ( this.scrollOffset.y + visibleNotes > this.pattern.getNotesPerTrack() ) {
             this.scrollOffset.y = this.pattern.getNotesPerTrack() - visibleNotes;
         }
-
-        console.log('scrollOffset: %s, %s', this.scrollOffset.x, this.scrollOffset.y);
     }
 
     PatternEditor.prototype.render = function(pattern, currentNote, isPlaying) {
@@ -286,7 +292,7 @@ define('ui/patterneditor', ['ui/inputhandler', 'sound/note'], function(InputHand
                     note = track.getNote(j);
                     if ( note ) {
                         noteStr = note.getNoteName() + (note.isSharp ? '' : '-') + note.octave + ' ' +
-                            (note.volume ? note.volume.toString(16) : '..') + ' ' +
+                            (note.volume ? note.volume.toString(16).toUpperCase() : '..') + ' ' +
                             note.sampleID.pad(2) + ' ' +
                             '...';
                         if ( j == currentNote) {
