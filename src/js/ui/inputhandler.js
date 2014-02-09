@@ -12,8 +12,6 @@ define('ui/inputhandler', [], function() {
         }
 
         this.onWheel = function(e) {
-            console.log('onWheel');
-            console.log(e);
             if ( ui.controls.patternEditor.containsPoint(e.clientX, e.clientY) ) {
                 ui.controls.patternEditor.scroll(0, e.wheelDeltaY/40*-1);
             }
@@ -21,10 +19,10 @@ define('ui/inputhandler', [], function() {
 
         this.onKeyDown = function(e) {
 //            console.log('InputHandler: onKeyDown: %s', e.keyCode);
-            if (e.keyCode == InputHandler.KEYS.VK_SPACE ) {
-                ui._playPattern();
-            }
             if ( ui.focusControl ) {
+                if (e.keyCode == InputHandler.KEYS.VK_SPACE ) {
+                    ui._playPattern();
+                }
                 ui.focusControl.onKeyDown(e);
             } else {
                 console.log('No control has keyboard focus');
@@ -46,6 +44,10 @@ define('ui/inputhandler', [], function() {
         VK_DELETE: 46
     }
 
+    InputHandler.isNoteKey = function(keyCode) {
+        var notes = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+        return (notes.indexOf(String.fromCharCode(keyCode)) != -1);
+    }
 
     return InputHandler;
 });

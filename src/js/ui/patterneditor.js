@@ -1,4 +1,4 @@
-define('ui/patterneditor', ['ui/inputhandler'], function(InputHandler) {
+define('ui/patterneditor', ['ui/inputhandler', 'sound/note'], function(InputHandler, Note) {
 
     function PatternEditor(display, dimensions) {
         this.display = display;
@@ -23,12 +23,14 @@ define('ui/patterneditor', ['ui/inputhandler'], function(InputHandler) {
             playingNoteFill: 'rgb(32, 32, 32)',
             editNoteText: 'rgb(164, 255, 164)',
             editNoteFill: 'rgb(16, 64, 16)',
+            editPositionFill: 'rgb(32, 96, 32)',
             editEmptyNoteText: 'rgb(128, 192, 128)',
             emptyNoteText: 'rgb(128, 128, 128)'
         }
         this.editPosition = {
             track: 0,
-            note: 0
+            note: 0,
+            position: 0
         }
         this.noteHeight = this.fonts.note.size;
     }
@@ -58,21 +60,42 @@ define('ui/patterneditor', ['ui/inputhandler'], function(InputHandler) {
      * @param e KeyboardEvent
      */
     PatternEditor.prototype.onKeyDown = function(e) {
+        var note;
+
         switch (e.keyCode) {
             case    InputHandler.KEYS.VK_LEFT:
-                if ( this.editPosition.track > 0 )
-                    this.editPosition.track--;
+                if ( this.editPosition.position > 0 ) {
+                    this.editPosition.position--;
+                    if ( this.editPosition.position == 1 || this.editPosition.position == 3 || this.editPosition.position == 6 || this.editPosition.position == 9 ) {
+                        this.editPosition.position--;
+                    }
+                } else {
+                    if ( this.editPosition.position == 0 && (this.editPosition.track > 0) ) {
+                        this.editPosition.track--;
+                        this.editPosition.position = 12;
+                    }
+                }
+
                 break;
 
             case    InputHandler.KEYS.VK_RIGHT:
-                if ( this.pattern && (this.editPosition.track < this.pattern.getTrackCount()-1) ) {
-                    this.editPosition.track++;
+                if ( this.editPosition.position < 12 ) {
+                    this.editPosition.position++;
+                    if ( this.editPosition.position == 1 || this.editPosition.position == 3 || this.editPosition.position == 6 || this.editPosition.position == 9 ) {
+                        this.editPosition.position++;
+                    }
+                } else {
+                    if ( this.pattern && (this.editPosition.track < this.pattern.getTrackCount()-1) ) {
+                        this.editPosition.track++;
+                        this.editPosition.position = 0;
+                    }
                 }
                 break;
 
             case    InputHandler.KEYS.VK_UP:
                 if ( this.editPosition.note > 0 ) {
                     this.editPosition.note--;
+                    this.editPosition.position = 0;
                 }
                 this._ensureNoteIsVisible(this.editPosition.track, this.editPosition.note);
                 break;
@@ -80,12 +103,73 @@ define('ui/patterneditor', ['ui/inputhandler'], function(InputHandler) {
             case    InputHandler.KEYS.VK_DOWN:
                 if ( this.pattern && (this.editPosition.note < this.pattern.getNotesPerTrack()-1) ) {
                     this.editPosition.note++;
+                    if ( this.editPosition.position <= 2 )  this.editPosition.position = 0;
+                    if ( this.editPosition.position >= 4 && this.editPosition.position <= 5 )   this.editPosition.position = 4;
                 }
                 this._ensureNoteIsVisible(this.editPosition.track, this.editPosition.note);
                 break;
 
             case    InputHandler.KEYS.VK_DELETE:
-                this.pattern.deleteNote(this.editPosition.track, this.editPosition.note, e.getModifierState('control'));
+                this.pattern.deleteNote(this.editPosition.track, this.editPosition.note, e.getModifierState('Control'));
+                break;
+
+            default:
+                switch ( this.editPosition.position ) {
+                    // note and octave
+                    case    0:
+                    case    1:
+                    case    2:
+                        if ( InputHandler.isNoteKey(e.keyCode) ) {
+                            this.pattern.setNote(this.editPosition.track, this.editPosition.note, new Note(String.fromCharCode(e.keyCode), e.getModifierState('Shift'), 4, 1));
+                        }
+                        if ( "0123456789".indexOf(String.fromCharCode(e.keyCode)) != -1 ) {
+                            note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
+                            if ( note ) {
+                                note.octave = parseInt(String.fromCharCode(e.keyCode));
+                            }
+                        }
+                        break;
+
+                    // volume
+                    case    4:
+                    case    5:
+                        var volume;
+                        var char = String.fromCharCode(e.keyCode);
+                        if ( "0123456789ABCDEF".indexOf(char) != -1 ) {
+                            note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
+                            if ( note ) {
+                                if ( this.editPosition.position == 4 ) {
+                                    volume = parseInt(char + '0', 16) | note.volume & 0x0F;
+                                } else if ( this.editPosition.position == 5 ) {
+                                    volume = parseInt(char, 16) | note.volume & 0xF0;
+                                    this.editPosition.position++;
+                                }
+                                note.volume = volume;
+                                this.editPosition.position++;
+                            }
+                        }
+                        break;
+
+                    // sample
+                    case    7:
+                    case    8:
+                        var char = String.fromCharCode(e.keyCode);
+                        var sample;
+                        if ( '0123456789'.indexOf(char) != -1 ) {
+                            note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
+                            if ( note ) {
+                                if ( this.editPosition.position == 7 ) {
+                                    sample = parseInt(char + '0', 16) | note.sampleID & 0x0F;
+                                } else if ( this.editPosition.position == 8 ) {
+                                    sample = parseInt(char, 16) | note.sampleID & 0xF0;
+                                    this.editPosition.position++;
+                                }
+                                note.sampleID = sample;
+                                this.editPosition.position++;
+                            }
+                        }
+                        break;
+                }
                 break;
         }
     }
@@ -186,6 +270,7 @@ define('ui/patterneditor', ['ui/inputhandler'], function(InputHandler) {
                     if ( j < this.scrollOffset.y ) continue;
 
                     offset = j - this.scrollOffset.y;
+
                     // fill the line's background
                     if ( j == currentNote) {
                         ctx.fillStyle = this.colours.playingNoteFill;
@@ -200,8 +285,8 @@ define('ui/patterneditor', ['ui/inputhandler'], function(InputHandler) {
 
                     note = track.getNote(j);
                     if ( note ) {
-                        noteStr = note.getNoteName() + (note.isSharp ? '#' : '-') + note.octave + ' ' +
-                            (note.volume ? note.volume : '..') + ' ' +
+                        noteStr = note.getNoteName() + (note.isSharp ? '' : '-') + note.octave + ' ' +
+                            (note.volume ? note.volume.toString(16) : '..') + ' ' +
                             note.sampleID.pad(2) + ' ' +
                             '...';
                         if ( j == currentNote) {
@@ -213,14 +298,31 @@ define('ui/patterneditor', ['ui/inputhandler'], function(InputHandler) {
                                 ctx.fillStyle = this.colours.defaultText;
                             }
                         }
-                        ctx.fillText(noteStr, rect.x + i * this.trackWidth + 7, rect.y + offset * this.fonts.note.size);
                     } else {
                         if ( editedNote ) {
                             ctx.fillStyle = this.colours.editEmptyNoteText;
                         } else {
                             ctx.fillStyle = this.colours.emptyNoteText;
                         }
-                        ctx.fillText('... .. .. ...', rect.x + i * this.trackWidth + 7, rect.y + offset * this.fonts.note.size);
+                        noteStr = '... .. .. ...';
+                    }
+
+                    // check if we need to render character by character (for the note currently being edited)
+                    if ( editedNote ) {
+                        var charOffset = 0, charWidth, oldFillStyle;
+                        for ( var c = 0, strLen = noteStr.length; c < strLen; c++ ) {
+                            charWidth = ctx.measureText(noteStr[c]).width;
+                            if ( c == this.editPosition.position ) {
+                                oldFillStyle = ctx.fillStyle;
+                                ctx.fillStyle = this.colours.editPositionFill;
+                                ctx.fillRect(rect.x + i * this.trackWidth + 7 + charOffset, rect.y + offset * this.fonts.note.size, charWidth, this.noteHeight);
+                                ctx.fillStyle = oldFillStyle;
+                            }
+                            ctx.fillText(noteStr[c], rect.x + i * this.trackWidth + 7 + charOffset, rect.y + offset * this.fonts.note.size);
+                            charOffset += charWidth;
+                        }
+                    } else {
+                        ctx.fillText(noteStr, rect.x + i * this.trackWidth + 7, rect.y + offset * this.fonts.note.size);
                     }
 
                     if ( rect.y + offset * this.fonts.note.size + this.fonts.note.size*2 >= rect.y + rect.h) {
