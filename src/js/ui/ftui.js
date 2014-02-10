@@ -1,4 +1,4 @@
-define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor'], function(InputHandler, PatternEditor) {
+define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist'], function(InputHandler, PatternEditor, SampleList) {
 
     function ftUI(display, soundSystem) {
         this.display = display;
@@ -38,7 +38,8 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor'], function(InputHandler
             return e;
         }
 
-        this.controls.patternEditor = new PatternEditor(this.display, {left: 250, top: 100, right: 10, bottom: 110} );
+        this.controls.patternEditor = new PatternEditor(this.display, {left: 250, top: 150, right: 10, bottom: 50} );
+        this.controls.sampleList = new SampleList(this.display, {left: 10, top: 150, width: 230, bottom: 50});
         this.controls.createPatternButton = createElement('button', 'Create Drum Pattern', 10, 20, 100, 50);
         this.controls.playPatternButton = createElement('button', 'Play the Shizzle!', 120, 20, 120, 25);
         this.controls.playPatternButton.disabled = true;
@@ -96,12 +97,12 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor'], function(InputHandler
         ctx.save();
 
         drawBackground.call(this, this.display);
-        drawSamples.call(this, this.display);
 
         var str = this.soundSystem.sampleBank.length + ' samples loaded';
         ctx.fillStyle = 'white';
         ctx.fillText(str, 200, 10);
 
+        this.controls.sampleList.render();
         this.controls.patternEditor.render(pattern, this.soundSystem.currentNote, this.soundSystem.playing);
 
         ctx.restore();
@@ -117,10 +118,6 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor'], function(InputHandler
 
         ctx.fillStyle = display.canvas.style.backgroundColor;
         ctx.fillRect(0, 0, display.width, display.height);
-    }
-
-    function drawSamples(display) {
-        // TODO: Draw a list of samples to the screen
     }
 
     return ftUI;
