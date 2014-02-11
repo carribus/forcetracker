@@ -124,7 +124,14 @@ define('ui/samplelist', ['ui/component'], function(Component) {
             for ( var j = 0, len = labels.length; j < len; j++ ) {
                 hRect.x = lastX;
                 hRect.w = rect.w * this.headers[j].width;
-                ctx.fillText(sampleBank[i][labels[j]], hRect.x + 5, hRect.y + hRect.h/2);
+                switch ( labels[j] ) {
+                    case    'index':
+                        ctx.fillText(sampleBank[i][labels[j]].toHex(2, true), hRect.x + 5, hRect.y + hRect.h/2);
+                        break;
+
+                    default:
+                        ctx.fillText(sampleBank[i][labels[j]], hRect.x + 5, hRect.y + hRect.h/2);
+                }
                 lastX = hRect.x + hRect.w;
             }
             hRect.y += hRect.h;

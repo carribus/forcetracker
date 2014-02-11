@@ -288,8 +288,8 @@ define('ui/patterneditor', ['ui/component', 'ui/inputhandler', 'sound/note'], fu
                     note = track.getNote(j);
                     if ( note ) {
                         noteStr = note.getNoteName() + (note.isSharp ? '' : '-') + note.octave + ' ' +
-                            (note.volume ? note.volume.toString(16).toUpperCase() : '..') + ' ' +
-                            note.sampleID.pad(2) + ' ' +
+                            (note.volume ? note.volume.toHex(2, true) : '..') + ' ' +
+                            note.sampleID.toHex(2, true) + ' ' +
                             '...';
                         if ( j == currentNote) {
                             ctx.fillStyle = this.colours.playingNoteText;

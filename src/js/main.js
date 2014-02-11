@@ -14,6 +14,14 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         return str;
     };
 
+    Number.prototype.toHex = function(width, upperCase) {
+        var hex = this.valueOf().toString(16);
+        for ( var i = hex.length; i < width; i++ ) {
+            hex = '0' + hex;
+        }
+        return (upperCase ? hex.toUpperCase() : hex);
+    }
+
     // create the display object
     var display = new Display().initialize();
     console.log('Display created:\n' +
