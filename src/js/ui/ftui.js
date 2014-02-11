@@ -102,7 +102,7 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist'], func
         ctx.fillStyle = 'white';
         ctx.fillText(str, 200, 10);
 
-        this.controls.sampleList.render();
+        this.controls.sampleList.render(this.soundSystem.sampleBank, pattern, this.soundSystem.currentNote);
         this.controls.patternEditor.render(pattern, this.soundSystem.currentNote, this.soundSystem.playing);
 
         ctx.restore();
