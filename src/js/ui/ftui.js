@@ -11,7 +11,10 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist'], func
             createPatternButton: null,
             playPatternButton: null,
             tempoTextField: null,
-            applyTempoButton: null
+            applyTempoButton: null,
+            addTrackButton: null,
+            trackCountTextField: null,
+            delTrackButton: null
         }
 
         this._createUIElements();
@@ -47,6 +50,14 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist'], func
         this.controls.stopPatternButton.disabled = true;
         this.controls.tempoTextField = createElement('input', null, 250, 20, 50, 16);
         this.controls.applyTempoButton = createElement('button', 'Apply Tempo', 310, 20, 100, 22);
+        this.controls.delTrackButton = createElement('button', '-', 504, 20, 30, 22);
+        this.controls.trackCountTextField = createElement('input', null, 535, 20, 30, 16);
+        this.controls.trackCountTextField.style.textAlign = 'center';
+        this.controls.trackCountTextField.setAttribute('readonly');
+        this.controls.addTrackButton = createElement('button', '+', 572, 20, 30, 22);
+
+        var o = createElement('div', 'Tracks: ', 450, 23, 50, 16);
+        o.style.color = 'lightgrey';
 
         this.focusControl = this.controls.patternEditor;
     }
@@ -77,8 +88,11 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist'], func
     ftUI.prototype.render = function() {
         if ( this.display) {
             var pattern = this.soundSystem.getPattern(0);
-            if ( pattern && this.controls.tempoTextField.value.length == 0 ) {
-                this.controls.tempoTextField.value = pattern.tempo.toString();
+            if ( pattern ) {
+                if ( this.controls.tempoTextField.value.length == 0 ) {
+                    this.controls.tempoTextField.value = pattern.tempo.toString();
+                }
+                this.controls.trackCountTextField.value = pattern.getTrackCount().toString();
             }
 
             drawTracker.call(this);

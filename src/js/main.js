@@ -45,7 +45,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
             { name: 'hihat_open', filename: 'samples/open_hihat1.wav' },
             { name: 'snare1', filename: 'samples/snare1.wav' },
             { name: 'snare2', filename: 'samples/snare2.wav' },
-            { name: 'snare2', filename: 'samples/snare3.wav' }
+            { name: 'snare3', filename: 'samples/snare3.wav' }
         ],
         onSamplesLoaded)
     }
@@ -65,6 +65,8 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     ui.controls.playPatternButton.addEventListener('click', playPattern);
     ui.controls.stopPatternButton.addEventListener('click', stopPattern);
     ui.controls.applyTempoButton.addEventListener('click', applyTempo);
+    ui.controls.addTrackButton.addEventListener('click', addTrack);
+    ui.controls.delTrackButton.addEventListener('click', delTrack);
 
     function createPattern() {
         var pattern = new Pattern();
@@ -97,7 +99,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         }
 
         // snare track
-        sample = sound.getSample('snare1');
+        sample = sound.getSample('snare2');
         track = pattern.getTrack(3);
         for ( i = 8; i < pattern.getNotesPerTrack(); i+= 16) {
             track.setNote(i, new Note('C', false, 3, sample.index));
@@ -126,6 +128,22 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         if ( pattern ) {
             pattern.setTempo(parseInt(ui.controls.tempoTextField.value));
         }
+    }
+
+    function addTrack() {
+        var pattern = sound.getPattern(0);
+        if ( pattern ) {
+            pattern.setTrackCount( pattern.getTrackCount()+1 );
+        }
+        ui.controls.addTrackButton.blur();
+    }
+
+    function delTrack() {
+        var pattern = sound.getPattern(0);
+        if ( pattern ) {
+            pattern.setTrackCount( pattern.getTrackCount()-1 );
+        }
+        ui.controls.delTrackButton.blur();
     }
 
 });

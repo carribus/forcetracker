@@ -1,5 +1,11 @@
 define('ui/samplelist', ['ui/component'], function(Component) {
 
+    /**
+     * SampleList UI component
+     * @param display
+     * @param dimensions
+     * @constructor
+     */
     function SampleList(display, dimensions) {
         Component.call(this, display, dimensions)
         this.headers = [
@@ -42,6 +48,12 @@ define('ui/samplelist', ['ui/component'], function(Component) {
 
     }
 
+    /**
+     *
+     * @param sampleBank
+     * @param pattern
+     * @param currentNote
+     */
     SampleList.prototype.render = function(sampleBank, pattern, currentNote) {
         var ctx, rect;
 
@@ -57,12 +69,27 @@ define('ui/samplelist', ['ui/component'], function(Component) {
         }
     }
 
+    /**
+     *
+     * @param ctx
+     * @param rect
+     * @param sampleBank
+     * @param pattern
+     * @param currentNote
+     * @private
+     */
     SampleList.prototype._drawList = function(ctx, rect, sampleBank, pattern, currentNote) {
         this._drawFrame(ctx, rect);
         this._drawHeader(ctx, rect);
         this._drawItemList(ctx, rect, sampleBank, pattern, currentNote);
     }
 
+    /**
+     *
+     * @param ctx
+     * @param rect
+     * @private
+     */
     SampleList.prototype._drawFrame = function(ctx, rect) {
         ctx.strokeStyle = 'rgb(128, 128, 128)';
         ctx.lineWidth = 0.5;
@@ -71,6 +98,12 @@ define('ui/samplelist', ['ui/component'], function(Component) {
         ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
     }
 
+    /**
+     *
+     * @param ctx
+     * @param rect
+     * @private
+     */
     SampleList.prototype._drawHeader = function(ctx, rect) {
         var hRect = { x: rect.x, y: rect.y, w: rect.w, h: rect.h };
         var lastX = rect.x;
@@ -92,6 +125,15 @@ define('ui/samplelist', ['ui/component'], function(Component) {
         }
     }
 
+    /**
+     *
+     * @param ctx
+     * @param rect
+     * @param sampleBank
+     * @param pattern
+     * @param currentNote
+     * @private
+     */
     SampleList.prototype._drawItemList = function(ctx, rect, sampleBank, pattern, currentNote) {
         var sampleCount = sampleBank.length;
         var hRect = { x: rect.x, y: rect.y + this.fonts.header.size + 10, w: rect.w, h: rect.h - (this.fonts.header.size + 10) };
@@ -139,6 +181,13 @@ define('ui/samplelist', ['ui/component'], function(Component) {
         }
     }
 
+    /**
+     *
+     * @param pattern
+     * @param currentNote
+     * @returns {Array}
+     * @private
+     */
     SampleList.prototype._getCurrentActiveSamples = function(pattern, currentNote) {
         var samples = [];
         if ( pattern ) {

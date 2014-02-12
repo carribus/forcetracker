@@ -12,11 +12,16 @@ define('sound/pattern', ['sound/track'], function(Track) {
 
     Pattern.prototype.setTrackCount = function(numTracks) {
         var track;
-        this.tracks = [];
-        for ( var i = 0; i < numTracks; i++ ) {
-            track = new Track();
-            track.setMaxNotes(this.notesPerTrack);
-            this.tracks.push(track);
+        var inc = numTracks > this.tracks.length ? 1 : -1;
+
+        while ( numTracks != this.tracks.length ) {
+            if ( inc == 1 ) {
+                track = new Track();
+                track.setMaxNotes(this.notesPerTrack);
+                this.tracks.push(track);
+            } else if ( inc == -1 ) {
+                this.tracks.splice( this.tracks.length-1 );
+            }
         }
     }
 
@@ -35,7 +40,6 @@ define('sound/pattern', ['sound/track'], function(Track) {
 
     Pattern.prototype.getTrack = function(index) {
         var track = null;
-//        console.log('getTrack(' + typeof index + ')');
 
         if ( typeof index == 'number' ) {
             track = this.tracks[index];
