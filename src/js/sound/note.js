@@ -10,7 +10,6 @@ define('sound/note', [], function() {
 
     Note.noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
-
     Note.prototype.getNoteName = function() {
         return this.noteName + (this.isSharp ? '#' : '');
     }
@@ -33,8 +32,17 @@ define('sound/note', [], function() {
         var numSemitones = semitones || 1;
         var index = Note.noteNames.indexOf(this.getNoteName());
 
-        this.noteName = noteNames[(index + numSemitones) % Note.noteNames.length];
-        this.octave += Math.floor((index + numSemitones) / Note.noteNames.length);
+        // TODO: Rewrite this so that it actually works
+        if ( index != -1 ) {
+            this.noteName = Note.noteNames[(index + numSemitones) % Note.noteNames.length];
+            if ( this.noteName.length == 2 ) {
+                this.noteName = this.noteName[0];
+                this.isSharp = true;
+            } else {
+                this.isSharp = false;
+            }
+            this.octave += Math.floor((index + numSemitones) / Note.noteNames.length);
+        }
     }
 
     Note.prototype.toString = function() {

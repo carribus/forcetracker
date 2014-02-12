@@ -51,6 +51,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     }
 
     function onSamplesLoaded(/*sampleBank*/) {
+        createPattern();
     }
 
     window.requestAnimationFrame(update);
@@ -105,6 +106,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
             track.setNote(i, new Note('C', false, 3, sample.index));
         }
 
+        sound.removePattern(0);
         sound.addPattern(pattern);
 
         ui.controls.playPatternButton.disabled = false;

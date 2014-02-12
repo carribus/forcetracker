@@ -57,7 +57,7 @@ define('ui/patterneditor', ['ui/component', 'ui/inputhandler', 'sound/note'], fu
      * @param e KeyboardEvent
      */
     PatternEditor.prototype.onKeyDown = function(e) {
-        var note;
+        var note, char;
 
         switch (e.keyCode) {
             case    InputHandler.KEYS.VK_LEFT:
@@ -116,21 +116,37 @@ define('ui/patterneditor', ['ui/component', 'ui/inputhandler', 'sound/note'], fu
                     case    0:
                     case    1:
                     case    2:
+                        char = String.fromCharCode(e.keyCode);
+
                         if ( InputHandler.isNoteKey(e.keyCode) ) {
                             note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
                             if ( !note ) {
-                                note = new Note(String.fromCharCode(e.keyCode), e.getModifierState('Shift'), 4, this.lastSampleID);
+                                note = new Note(char, e.getModifierState('Shift'), 4, this.lastSampleID);
                             } else {
-                                note.noteName = String.fromCharCode(e.keyCode);
+                                note.noteName = char;
                                 note.isSharp = e.getModifierState('Shift');
                             }
 
                             this.pattern.setNote(this.editPosition.track, this.editPosition.note, note);
-                        }
-                        if ( "0123456789".indexOf(String.fromCharCode(e.keyCode)) != -1 ) {
+                        } else if ( "0123456789".indexOf(char) != -1 ) {
                             note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
                             if ( note ) {
-                                note.octave = parseInt(String.fromCharCode(e.keyCode));
+                                note.octave = parseInt(char);
+                            }
+                        } else {
+                            note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
+                            if ( note ) {
+                                switch (e.keyCode ) {
+                                    case    107:
+                                    case    187:
+                                        note.increment(1);
+                                        break;
+
+                                    case    109:
+                                    case    189:
+                                        note.increment(-1);
+                                        break;
+                                }
                             }
                         }
                         break;
@@ -139,7 +155,8 @@ define('ui/patterneditor', ['ui/component', 'ui/inputhandler', 'sound/note'], fu
                     case    4:
                     case    5:
                         var volume;
-                        var char = String.fromCharCode(e.keyCode);
+
+                        char = String.fromCharCode(e.keyCode);
                         if ( "0123456789ABCDEF".indexOf(char) != -1 ) {
                             note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
                             if ( note ) {

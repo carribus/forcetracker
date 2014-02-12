@@ -70,6 +70,11 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
         this.patterns.push(pattern);
     }
 
+    SoundSystem.prototype.removePattern = function(patternIndex) {
+        var pattern = this.patterns.splice(patternIndex, 1);
+        return pattern;
+    }
+
     SoundSystem.prototype.getPattern = function(index) {
         return this.patterns[index];
     }
