@@ -165,6 +165,7 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
                     volNode.connect(pannerNode);
                     pannerNode.connect(analyserNode);
                     analyserNode.connect(this.context.destination);
+                    analyserNode.fftSize = 64;
                     this.trackRoutes[i] = {
                         gain: volNode,
                         panner: pannerNode,

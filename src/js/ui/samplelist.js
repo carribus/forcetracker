@@ -63,7 +63,7 @@ define('ui/samplelist', ['ui/component'], function(Component) {
 
             ctx.save();
 
-            this._drawList(ctx, rect, sampleBank, pattern, currentNote);
+            this._drawList(sampleBank, pattern, currentNote);
 
             ctx.restore();
         }
@@ -78,10 +78,10 @@ define('ui/samplelist', ['ui/component'], function(Component) {
      * @param currentNote
      * @private
      */
-    SampleList.prototype._drawList = function(ctx, rect, sampleBank, pattern, currentNote) {
-        this._drawFrame(ctx, rect);
-        this._drawHeader(ctx, rect);
-        this._drawItemList(ctx, rect, sampleBank, pattern, currentNote);
+    SampleList.prototype._drawList = function(sampleBank, pattern, currentNote) {
+        this._drawFrame(this.display.context, this.rect);
+        this._drawHeader(this.display.context, this.rect);
+        this._drawItemList(this.display.context, this.rect, sampleBank, pattern, currentNote);
     }
 
     /**

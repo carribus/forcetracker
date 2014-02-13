@@ -1,4 +1,4 @@
-define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist'], function(InputHandler, PatternEditor, SampleList) {
+define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/visualiser'], function(InputHandler, PatternEditor, SampleList, Visualiser) {
 
     function ftUI(display, soundSystem) {
         this.display = display;
@@ -15,6 +15,10 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist'], func
             addTrackButton: null,
             trackCountTextField: null,
             delTrackButton: null
+        }
+        this.visualisers = {
+            tracks: [],
+            main: null
         }
 
         this._createUIElements();
@@ -59,6 +63,12 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist'], func
         var o = createElement('div', 'Tracks: ', 450, 23, 50, 16);
         o.style.color = 'lightgrey';
 
+        // create 16 track visualisers
+        for ( var i = 0; i < 16; i++ ) {
+            o = new Visualiser(this.display, {left: 10, top: 10, right: 100, bottom: 100});
+            this.visualisers.tracks.push(o);
+        }
+
         this.focusControl = this.controls.patternEditor;
     }
 
@@ -86,6 +96,8 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist'], func
     }
 
     ftUI.prototype.render = function() {
+        var trackCount;
+
         if ( this.display) {
             var pattern = this.soundSystem.getPattern(0);
             if ( pattern ) {
@@ -118,6 +130,24 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist'], func
 
         this.controls.sampleList.render(this.soundSystem.sampleBank, pattern, this.soundSystem.currentNote);
         this.controls.patternEditor.render(pattern, this.soundSystem.currentNote, this.soundSystem.playing);
+
+        // render the track visualisers
+        if ( pattern ) {
+            var trackCount = pattern.getTrackCount();
+            var patternRect = this.controls.patternEditor.rect;
+            var trackWidth = 120;
+
+            for ( var i = 0; i < trackCount; i++ ) {
+                this.visualisers.tracks[i].dimensions = {
+                    left: patternRect.x + trackWidth * i,
+                    top: 75,
+                    width: trackWidth,
+                    height: 65
+                };
+                this.visualisers.tracks[i].setAnalyserNode(this.soundSystem.trackRoutes[i].analyser);
+                this.visualisers.tracks[i].render();
+            }
+        }
 
         ctx.restore();
     }

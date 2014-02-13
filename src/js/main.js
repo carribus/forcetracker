@@ -108,6 +108,9 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
 
         sound.removePattern(0);
         sound.addPattern(pattern);
+        // TODO: Fix this private call
+        sound.currentPattern = pattern;
+        sound._configureRouting();
 
         ui.controls.playPatternButton.disabled = false;
     }
@@ -137,6 +140,8 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         if ( pattern ) {
             pattern.setTrackCount( pattern.getTrackCount()+1 );
         }
+        sound._configureRouting();
+
         ui.controls.addTrackButton.blur();
     }
 
@@ -145,6 +150,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         if ( pattern ) {
             pattern.setTrackCount( pattern.getTrackCount()-1 );
         }
+        sound._configureRouting();
         ui.controls.delTrackButton.blur();
     }
 
