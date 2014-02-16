@@ -54,7 +54,6 @@ define('ui/visualiser', ['ui/component'], function(Component) {
         ctx.moveTo(this.rect.x, this.rect.y + this.rect.h - this.frequencyData[0]*scale);
         for ( var i = 1; i < this.frequencyData.length; i++ ) {
             ctx.lineTo(this.rect.x + segmentLength*i, this.rect.y + this.rect.h - this.frequencyData[i]*scale);
-//            console.log(this.frequencyData[i]);
         }
         ctx.stroke();
     }

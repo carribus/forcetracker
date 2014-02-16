@@ -140,9 +140,9 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
             for ( var i = 0; i < trackCount; i++ ) {
                 this.visualisers.tracks[i].dimensions = {
                     left: patternRect.x + trackWidth * i,
-                    top: 75,
+                    top: 105,
                     width: trackWidth,
-                    height: 65
+                    height: 40
                 };
                 this.visualisers.tracks[i].setAnalyserNode(this.soundSystem.trackRoutes[i].analyser);
                 this.visualisers.tracks[i].render();
