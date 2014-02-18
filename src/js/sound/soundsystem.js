@@ -75,6 +75,10 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
         return pattern;
     }
 
+    SoundSystem.prototype.getPatternCount = function() {
+        return this.patterns.length;
+    }
+
     SoundSystem.prototype.getPattern = function(index) {
         return this.patterns[index];
     }

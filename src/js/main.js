@@ -5,6 +5,8 @@ require.config({
 require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/track', 'sound/note'], function(Display, ftUI, SoundSystem, Pattern, Track, Note) {
     console.log('Force Tracker starting...');
 
+    var currentPatternIndex = 0;
+
     Number.prototype.pad = function(toLength) {
         var str = '' + this.valueOf();
         for ( var i = str.length; i < toLength; i++ ) {
@@ -52,6 +54,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
 
     function onSamplesLoaded(/*sampleBank*/) {
         createPattern();
+        createPattern();
     }
 
     window.requestAnimationFrame(update);
@@ -68,6 +71,8 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     ui.controls.applyTempoButton.addEventListener('click', applyTempo);
     ui.controls.addTrackButton.addEventListener('click', addTrack);
     ui.controls.delTrackButton.addEventListener('click', delTrack);
+    ui.controls.nextPatternButton.addEventListener('click', nextPattern);
+    ui.controls.prevPatternButton.addEventListener('click', prevPattern);
 
     function createPattern() {
         var pattern = new Pattern();
@@ -106,7 +111,6 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
             track.setNote(i, new Note('C', false, 3, sample.index));
         }
 
-        sound.removePattern(0);
         sound.addPattern(pattern);
         // TODO: Fix this private call
         sound.currentPattern = pattern;
@@ -116,7 +120,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     }
 
     function playPattern() {
-        var pattern = sound.getPattern(0);
+        var pattern = sound.getPattern(currentPatternIndex);
         if ( pattern ) {
             sound.playPattern(pattern);
             ui.controls.stopPatternButton.disabled = false;
@@ -129,14 +133,14 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     }
 
     function applyTempo() {
-        var pattern = sound.getPattern(0);
+        var pattern = sound.getPattern(currentPatternIndex);
         if ( pattern ) {
             pattern.setTempo(parseInt(ui.controls.tempoTextField.value));
         }
     }
 
     function addTrack() {
-        var pattern = sound.getPattern(0);
+        var pattern = sound.getPattern(currentPatternIndex);
         if ( pattern ) {
             pattern.setTrackCount( pattern.getTrackCount()+1 );
         }
@@ -146,12 +150,23 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     }
 
     function delTrack() {
-        var pattern = sound.getPattern(0);
+        var pattern = sound.getPattern(currentPatternIndex);
         if ( pattern ) {
             pattern.setTrackCount( pattern.getTrackCount()-1 );
         }
         sound._configureRouting();
         ui.controls.delTrackButton.blur();
+    }
+
+    function nextPattern() {
+        var pattern = sound.getPattern(currentPatternIndex+1);
+        if ( pattern ) {
+            currentPatternIndex++;
+        }
+    }
+
+    function prevPattern() {
+
     }
 
 });

@@ -14,7 +14,10 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
             applyTempoButton: null,
             addTrackButton: null,
             trackCountTextField: null,
-            delTrackButton: null
+            delTrackButton: null,
+            prevPatternButton: null,
+            patternIndicatorField: null,
+            nextPatternButton: null
         }
         this.visualisers = {
             tracks: [],
@@ -59,8 +62,16 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
         this.controls.trackCountTextField.style.textAlign = 'center';
         this.controls.trackCountTextField.setAttribute('readonly');
         this.controls.addTrackButton = createElement('button', '+', 572, 20, 30, 22);
+        this.controls.prevPatternButton = createElement('button', '<', 504, 50, 30, 22);
+        this.controls.patternIndicatorField = createElement('input', null, 535, 50, 30, 16);
+        this.controls.patternIndicatorField.style.textAlign = 'center';
+        this.controls.patternIndicatorField.setAttribute('readonly');
+        this.controls.nextPatternButton = createElement('button', '>', 572, 50, 30, 22);
 
         var o = createElement('div', 'Tracks: ', 450, 23, 50, 16);
+        o.style.color = 'lightgrey';
+
+        o = createElement('div', 'Patterns: ', 443, 52, 50, 16);
         o.style.color = 'lightgrey';
 
         // create 16 track visualisers
@@ -105,6 +116,8 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
                     this.controls.tempoTextField.value = pattern.tempo.toString();
                 }
                 this.controls.trackCountTextField.value = pattern.getTrackCount().toString();
+
+                this.controls.patternIndicatorField.value = this.soundSystem.patterns.indexOf(pattern)+1 + '/' + this.soundSystem.getPatternCount();
             }
 
             drawTracker.call(this);
