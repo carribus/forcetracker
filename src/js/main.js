@@ -55,6 +55,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     function onSamplesLoaded(/*sampleBank*/) {
         createPattern();
         createPattern();
+        sound.currentPattern = sound.getPattern(0);
     }
 
     window.requestAnimationFrame(update);
@@ -162,11 +163,18 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         var pattern = sound.getPattern(currentPatternIndex+1);
         if ( pattern ) {
             currentPatternIndex++;
+            sound.currentPattern = pattern;
         }
+        console.log('currentPatternIndex: %s', currentPatternIndex);
     }
 
     function prevPattern() {
-
+        var pattern = sound.getPattern(currentPatternIndex-1);
+        if ( pattern ) {
+            currentPatternIndex--;
+            sound.currentPattern = pattern;
+        }
+        console.log('currentPatternIndex: %s', currentPatternIndex);
     }
 
 });

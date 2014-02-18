@@ -95,7 +95,7 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
     }
 
     ftUI.prototype._playPattern = function() {
-        var pattern = this.soundSystem.getPattern(0);
+        var pattern = this.soundSystem.currentPattern;
         if ( pattern ) {
             if ( !this.soundSystem.playing ) {
                 this.soundSystem.playPattern(pattern);
@@ -107,17 +107,15 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
     }
 
     ftUI.prototype.render = function() {
-        var trackCount;
-
         if ( this.display) {
-            var pattern = this.soundSystem.getPattern(0);
+            var pattern = this.soundSystem.currentPattern;
             if ( pattern ) {
                 if ( this.controls.tempoTextField.value.length == 0 ) {
                     this.controls.tempoTextField.value = pattern.tempo.toString();
                 }
                 this.controls.trackCountTextField.value = pattern.getTrackCount().toString();
 
-                this.controls.patternIndicatorField.value = this.soundSystem.patterns.indexOf(pattern)+1 + '/' + this.soundSystem.getPatternCount();
+                this.controls.patternIndicatorField.value = (this.soundSystem.patterns.indexOf(pattern)+1) + '/' + this.soundSystem.getPatternCount();
             }
 
             drawTracker.call(this);
@@ -131,7 +129,7 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
     //
     function drawTracker() {
         var ctx = this.display.context;
-        var pattern = this.soundSystem.getPattern(0);
+        var pattern = this.soundSystem.currentPattern;
 
         ctx.save();
 
