@@ -1,9 +1,9 @@
 define('sound/note', [], function() {
 
     function Note(noteName, isSharp, octave, sampleID) {
-        this.noteName = noteName || 'C';
+        this.noteName = noteName;
         this.isSharp = isSharp;
-        this.octave = octave || 4;
+        this.octave = octave;
         this.volume = null;
         this.sampleID = sampleID;
     }
@@ -11,7 +11,7 @@ define('sound/note', [], function() {
     Note.noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
     Note.prototype.getNoteName = function() {
-        return this.noteName + (this.isSharp ? '#' : '');
+        return this.noteName ? this.noteName + (this.isSharp ? '#' : '') : '..';
     }
 
     Note.prototype.getFrequency = function() {

@@ -107,10 +107,23 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
                         // if we have a note to play, do it
                         source = this._createBufferNode(note);
                         if ( source ) {
+                            /*
+                                TODO: If you want to terminate the currently playing note, perhaps you should
+                                perform a 'noteOff()' call before reconnecting the next sound
+                            */
                             // connect the node to the appropriate channel's gainNode
                             source.connect(this.trackRoutes[i].gain);
                             this.trackRoutes[i].gain.gain.value = (note.volume ? note.volume : 255) / 255;
                             source.noteOn(0);
+                        } else {
+                            if ( note.volume != null ) {
+                                if ( i == 4 )
+                                    console.log('Setting existing gain to %s', note.volume);
+                                this.trackRoutes[i].gain.gain.value = note.volume / 255;
+                            }
+                        }
+                        if ( i == 4 ) {
+                            console.log(this.trackRoutes[i].gain.gain.value);
                         }
                     }
                 }
@@ -133,10 +146,13 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
      * @private
      */
     SoundSystem.prototype._createBufferNode = function(note) {
-        var source = this.context.createBufferSource();
-        source.buffer = this.getSample(note.sampleID).buffer;
-//        source.connect(this.context.destination);
-        source.playbackRate.value = (note.getFrequency() / 440.0);
+        var source;
+
+        if ( note.noteName != null && note.sampleID != null ) {
+            source = this.context.createBufferSource();
+            source.buffer = this.getSample(note.sampleID).buffer;
+            source.playbackRate.value = (note.getFrequency() / 440.0);
+        }
 
         return source;
     }

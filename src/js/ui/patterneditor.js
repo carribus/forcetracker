@@ -159,6 +159,11 @@ define('ui/patterneditor', ['ui/component', 'ui/inputhandler', 'sound/note'], fu
                         char = String.fromCharCode(e.keyCode);
                         if ( "0123456789ABCDEF".indexOf(char) != -1 ) {
                             note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
+                            if ( !note ) {
+                                note = new Note(null, false, null, null);
+                                this.pattern.setNote(this.editPosition.track, this.editPosition.note, note);
+                            }
+
                             if ( note ) {
                                 if ( this.editPosition.position == 4 ) {
                                     volume = parseInt(char + '0', 16) | note.volume & 0x0F;
@@ -304,10 +309,20 @@ define('ui/patterneditor', ['ui/component', 'ui/inputhandler', 'sound/note'], fu
 
                     note = track.getNote(j);
                     if ( note ) {
-                        noteStr = note.getNoteName() + (note.isSharp ? '' : '-') + note.octave + ' ' +
-                            (note.volume ? note.volume.toHex(2, true) : '..') + ' ' +
-                            note.sampleID.toHex(2, true) + ' ' +
-                            '...';
+                        noteStr =
+                            (note.noteName != null? note.noteName : '.') +
+                                (note.isSharp ? '#' : note.noteName ? '-' : '.') +
+                                (note.octave ? note.octave : note.noteName ? '0' : '.') +
+                                ' ' +
+                                (note.volume != null ? note.volume.toHex(2, true) : '..') +
+                                ' ' +
+                                (note.sampleID != null ? note.sampleID.toHex(2, true) : '..') +
+                                ' ' +
+                                '...';
+//                            (note.isSharp ? '' : '-') + note.octave + ' ' +
+//                            (note.volume ? note.volume.toHex(2, true) : '..') + ' ' +
+//                            (note.sampleID ? note.sampleID.toHex(2, true) : '..') + ' ' +
+//                            '...';
                         if ( j == currentNote) {
                             ctx.fillStyle = this.colours.playingNoteText;
                         } else {
