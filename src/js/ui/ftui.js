@@ -49,7 +49,7 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
         }
 
         this.controls.patternEditor = new PatternEditor(this.display, {left: 250, top: 150, right: 10, bottom: 50} );
-        this.controls.sampleList = new SampleList(this.display, {left: 10, top: 150, width: 230, bottom: 50});
+        this.controls.sampleList = new SampleList(this.display, {left: 10, top: 150, width: 230, bottom: 50}, this);
         this.controls.createPatternButton = createElement('button', 'Create Drum Pattern', 10, 20, 100, 50);
         this.controls.playPatternButton = createElement('button', 'Play the Shizzle!', 120, 20, 120, 25);
         this.controls.playPatternButton.disabled = true;
@@ -60,12 +60,12 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
         this.controls.delTrackButton = createElement('button', '-', 504, 20, 30, 22);
         this.controls.trackCountTextField = createElement('input', null, 535, 20, 30, 16);
         this.controls.trackCountTextField.style.textAlign = 'center';
-        this.controls.trackCountTextField.setAttribute('readonly');
+        this.controls.trackCountTextField.setAttribute('readonly', true);
         this.controls.addTrackButton = createElement('button', '+', 572, 20, 30, 22);
         this.controls.prevPatternButton = createElement('button', '<', 504, 50, 30, 22);
         this.controls.patternIndicatorField = createElement('input', null, 535, 50, 30, 16);
         this.controls.patternIndicatorField.style.textAlign = 'center';
-        this.controls.patternIndicatorField.setAttribute('readonly');
+        this.controls.patternIndicatorField.setAttribute('readonly', true);
         this.controls.nextPatternButton = createElement('button', '>', 572, 50, 30, 22);
 
         var o = createElement('div', 'Tracks: ', 450, 23, 50, 16);
@@ -90,6 +90,8 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
     ftUI.prototype._registerInputHandlers = function() {
         this.display.canvas.addEventListener('mousedown', this.inputHandler.onMouseDown);
         this.display.canvas.addEventListener('mousewheel', this.inputHandler.onWheel);
+        this.display.canvas.addEventListener('dragover', this.inputHandler.onDragOver);
+        this.display.canvas.addEventListener('drop', this.inputHandler.onDrop);
         window.addEventListener('keydown', this.inputHandler.onKeyDown);
         window.addEventListener('keyup', this.inputHandler.onKeyUp);
     }
@@ -103,6 +105,26 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
             } else {
                 this.soundSystem.playing = false;
             }
+        }
+    }
+
+    ftUI.prototype.startSampleUpload = function(fileArray) {
+        var _this = this;
+        for ( var i = 0; i < fileArray.length; i++ ) {
+            var reader = new FileReader();
+            reader.sample = {
+                name: fileArray[i].name,
+                filename: fileArray[i].name
+            }
+            reader.onload = function(e) {
+                var _reader = this;
+                _this.soundSystem.context.decodeAudioData(e.currentTarget.result, function(buffer) {
+                    _reader.sample.buffer = buffer;
+                    _reader.sample.index = _this.soundSystem.sampleBank.length;
+                    _this.soundSystem.sampleBank.push(_reader.sample);
+                })
+            }
+            reader.readAsArrayBuffer(fileArray[i]);
         }
     }
 

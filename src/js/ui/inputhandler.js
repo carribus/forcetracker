@@ -17,6 +17,16 @@ define('ui/inputhandler', [], function() {
             }
         }
 
+        this.onDragOver = function(e) {
+            e.preventDefault();
+            ui.controls.sampleList.highlightForDrop = ui.controls.sampleList.containsPoint(e.clientX, e.clientY);
+        }
+
+        this.onDrop = function(e) {
+            ui.controls.sampleList.onDrop(e);
+            e.preventDefault();
+        }
+
         this.onKeyDown = function(e) {
 //            console.log('InputHandler: onKeyDown: %s', e.keyCode);
             if ( ui.focusControl ) {

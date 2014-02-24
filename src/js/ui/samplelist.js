@@ -6,8 +6,10 @@ define('ui/samplelist', ['ui/component'], function(Component) {
      * @param dimensions
      * @constructor
      */
-    function SampleList(display, dimensions) {
-        Component.call(this, display, dimensions)
+    function SampleList(display, dimensions, ui) {
+        Component.call(this, display, dimensions);
+        this.ui = ui;
+        this.highlightForDrop = false;
         this.headers = [
             { label: 'ID', key: 'sampleID', width: 0.15 },
             { label: 'Sample', key: 'sampleName', width: 0.85 }
@@ -25,6 +27,10 @@ define('ui/samplelist', ['ui/component'], function(Component) {
             }
         }
         this.colours = {
+            frameStroke: 'rgb(128, 128, 128)',
+            frameFill: 'rgb(16, 16, 16)',
+            frameStrokeDrop: 'rgb(128, 196, 128)',
+            frameFillDrop: 'rgb(16, 48, 16)',
             headerFill: 'rgb(64, 64, 64)',
             headerText: 'rgb(255, 255, 255)',
             sampleFill: 'rgb(16, 16, 16)',
@@ -46,6 +52,28 @@ define('ui/samplelist', ['ui/component'], function(Component) {
 
     SampleList.prototype.scroll = function(xOffset, yOffset) {
 
+    }
+
+    SampleList.prototype.onDrop = function(e) {
+        var validTypes = ['audio/wav'];
+        var acceptedFiles = [];
+        var files = e.dataTransfer.files;
+
+        this.highlightForDrop = false;
+        if ( files.length > 0 ) {
+            for ( var i = 0; i < files.length; i++ ) {
+                if ( validTypes.indexOf(files[i].type) != -1 ) {
+                    console.log('Accepting sample: %s', files[i].name);
+                    acceptedFiles.push(files[i]);
+                } else {
+                    console.log('invalid sample file type: %s', files[i].name);
+                }
+            }
+        }
+
+        if ( this.ui ) {
+            this.ui.startSampleUpload(acceptedFiles);
+        }
     }
 
     /**
@@ -91,9 +119,9 @@ define('ui/samplelist', ['ui/component'], function(Component) {
      * @private
      */
     SampleList.prototype._drawFrame = function(ctx, rect) {
-        ctx.strokeStyle = 'rgb(128, 128, 128)';
-        ctx.lineWidth = 0.5;
-        ctx.fillStyle = 'rgb(16, 16, 16)';
+        ctx.strokeStyle = this.highlightForDrop ? this.colours.frameStrokeDrop : this.colours.frameStroke;
+        ctx.lineWidth = this.highlightForDrop ? 2.0 : 0.5;
+        ctx.fillStyle = this.highlightForDrop ? this.colours.frameFillDrop : this.colours.frameFill;
         ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
         ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
     }
