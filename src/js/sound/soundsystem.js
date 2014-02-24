@@ -117,8 +117,6 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
                             source.noteOn(0);
                         } else {
                             if ( note.volume != null ) {
-                                if ( i == 4 )
-                                    console.log('Setting existing gain to %s', note.volume);
                                 this.trackRoutes[i].gain.gain.value = note.volume / 255;
                             }
                         }
