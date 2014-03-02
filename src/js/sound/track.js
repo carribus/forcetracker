@@ -23,7 +23,18 @@ define('sound/track', function() {
     Track.prototype.deleteNote = function(index, shiftUp) {
         if ( !shiftUp ) {
             this.setNote(index, null);
+        } else {
+            for ( var i = index; i < this.maxNotes; i++ ) {
+                this.setNote(i, this.getNote(i+1));
+            }
         }
+    }
+
+    Track.prototype.insertNote = function(index) {
+        for ( var i = this.maxNotes-1; i > index; i-- ) {
+            this.setNote(i, this.getNote(i-1));
+        }
+        this.setNote(index, null);
     }
 
     return Track;

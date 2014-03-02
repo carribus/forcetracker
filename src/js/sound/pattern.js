@@ -78,5 +78,13 @@ define('sound/pattern', ['sound/track'], function(Track) {
         }
     }
 
+    Pattern.prototype.insertNote = function(trackIndex, noteIndex) {
+        var track = this.getTrack(trackIndex);
+
+        if ( track ) {
+            track.insertNote(noteIndex);
+        }
+    }
+
     return Pattern;
 })

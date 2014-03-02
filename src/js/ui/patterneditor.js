@@ -31,6 +31,12 @@ define('ui/patterneditor', ['ui/component', 'ui/inputhandler', 'sound/note'], fu
             note: 0,
             position: 0
         }
+        this.selection = {
+            startTrack: -1,
+            endTrack: -1,
+            startNote: -1,
+            endNote: -1
+        }
         this.noteHeight = this.fonts.note.size;
     }
     PatternEditor.prototype = Object.create(Component.prototype);
@@ -61,53 +67,28 @@ define('ui/patterneditor', ['ui/component', 'ui/inputhandler', 'sound/note'], fu
 
         switch (e.keyCode) {
             case    InputHandler.KEYS.VK_LEFT:
-                if ( this.editPosition.position > 0 ) {
-                    this.editPosition.position--;
-                    if ( this.editPosition.position == 1 || this.editPosition.position == 3 || this.editPosition.position == 6 || this.editPosition.position == 9 ) {
-                        this.editPosition.position--;
-                    }
-                } else {
-                    if ( this.editPosition.position == 0 && (this.editPosition.track > 0) ) {
-                        this.editPosition.track--;
-                        this.editPosition.position = 12;
-                    }
-                }
-
+                this._navigateLeft();
                 break;
 
             case    InputHandler.KEYS.VK_RIGHT:
-                if ( this.editPosition.position < 12 ) {
-                    this.editPosition.position++;
-                    if ( this.editPosition.position == 1 || this.editPosition.position == 3 || this.editPosition.position == 6 || this.editPosition.position == 9 ) {
-                        this.editPosition.position++;
-                    }
-                } else {
-                    if ( this.pattern && (this.editPosition.track < this.pattern.getTrackCount()-1) ) {
-                        this.editPosition.track++;
-                        this.editPosition.position = 0;
-                    }
-                }
+                this._navigateRight();
                 break;
 
             case    InputHandler.KEYS.VK_UP:
-                if ( this.editPosition.note > 0 ) {
-                    this.editPosition.note--;
-                    this.editPosition.position = 0;
-                }
-                this._ensureNoteIsVisible(this.editPosition.track, this.editPosition.note);
+                this._navigateUp();
                 break;
 
             case    InputHandler.KEYS.VK_DOWN:
-                if ( this.pattern && (this.editPosition.note < this.pattern.getNotesPerTrack()-1) ) {
-                    this.editPosition.note++;
-                    if ( this.editPosition.position <= 2 )  this.editPosition.position = 0;
-                    if ( this.editPosition.position >= 4 && this.editPosition.position <= 5 )   this.editPosition.position = 4;
-                }
-                this._ensureNoteIsVisible(this.editPosition.track, this.editPosition.note);
+                this._navigateDown();
                 break;
 
             case    InputHandler.KEYS.VK_DELETE:
+            case    InputHandler.KEYS.VK_MINUS:
                 this.pattern.deleteNote(this.editPosition.track, this.editPosition.note, e.getModifierState('Control'));
+                break;
+
+            case    InputHandler.KEYS.VK_PLUS:
+                this.pattern.insertNote(this.editPosition.track, this.editPosition.note);
                 break;
 
             default:
@@ -319,10 +300,6 @@ define('ui/patterneditor', ['ui/component', 'ui/inputhandler', 'sound/note'], fu
                                 (note.sampleID != null ? note.sampleID.toHex(2, true) : '..') +
                                 ' ' +
                                 '...';
-//                            (note.isSharp ? '' : '-') + note.octave + ' ' +
-//                            (note.volume ? note.volume.toHex(2, true) : '..') + ' ' +
-//                            (note.sampleID ? note.sampleID.toHex(2, true) : '..') + ' ' +
-//                            '...';
                         if ( j == currentNote) {
                             ctx.fillStyle = this.colours.playingNoteText;
                         } else {
@@ -379,6 +356,51 @@ define('ui/patterneditor', ['ui/component', 'ui/inputhandler', 'sound/note'], fu
         } else if ( noteIndex >= this.scrollOffset.y + visibleNotes ) {
             this.scrollOffset.y = noteIndex - visibleNotes;
         }
+    }
+
+    PatternEditor.prototype._navigateLeft = function() {
+        if ( this.editPosition.position > 0 ) {
+            this.editPosition.position--;
+            if ( this.editPosition.position == 1 || this.editPosition.position == 3 || this.editPosition.position == 6 || this.editPosition.position == 9 ) {
+                this.editPosition.position--;
+            }
+        } else {
+            if ( this.editPosition.position == 0 && (this.editPosition.track > 0) ) {
+                this.editPosition.track--;
+                this.editPosition.position = 12;
+            }
+        }
+    }
+
+    PatternEditor.prototype._navigateRight = function() {
+        if ( this.editPosition.position < 12 ) {
+            this.editPosition.position++;
+            if ( this.editPosition.position == 1 || this.editPosition.position == 3 || this.editPosition.position == 6 || this.editPosition.position == 9 ) {
+                this.editPosition.position++;
+            }
+        } else {
+            if ( this.pattern && (this.editPosition.track < this.pattern.getTrackCount()-1) ) {
+                this.editPosition.track++;
+                this.editPosition.position = 0;
+            }
+        }
+    }
+
+    PatternEditor.prototype._navigateUp = function() {
+        if ( this.editPosition.note > 0 ) {
+            this.editPosition.note--;
+            this.editPosition.position = 0;
+        }
+        this._ensureNoteIsVisible(this.editPosition.track, this.editPosition.note);
+    }
+
+    PatternEditor.prototype._navigateDown = function() {
+        if ( this.pattern && (this.editPosition.note < this.pattern.getNotesPerTrack()-1) ) {
+            this.editPosition.note++;
+            if ( this.editPosition.position <= 2 )  this.editPosition.position = 0;
+            if ( this.editPosition.position >= 4 && this.editPosition.position <= 5 )   this.editPosition.position = 4;
+        }
+        this._ensureNoteIsVisible(this.editPosition.track, this.editPosition.note);
     }
 
     return PatternEditor;

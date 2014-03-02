@@ -5,8 +5,6 @@ require.config({
 require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/track', 'sound/note'], function(Display, ftUI, SoundSystem, Pattern, Track, Note) {
     console.log('Force Tracker starting...');
 
-    var currentPatternIndex = 0;
-
     Number.prototype.pad = function(toLength) {
         var str = '' + this.valueOf();
         for ( var i = str.length; i < toLength; i++ ) {
@@ -55,7 +53,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     function onSamplesLoaded(/*sampleBank*/) {
         createPattern();
         createPattern();
-        sound.currentPattern = sound.getPattern(0);
+        sound.setCurrentPattern(0);
     }
 
     window.requestAnimationFrame(update);
@@ -67,8 +65,8 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     }
 
     ui.controls.createPatternButton.addEventListener('click', createPattern);
-    ui.controls.playPatternButton.addEventListener('click', playPattern);
-    ui.controls.stopPatternButton.addEventListener('click', stopPattern);
+    ui.controls.playSongButton.addEventListener('click', playSong);
+    ui.controls.stopSongButton.addEventListener('click', stopSong);
     ui.controls.applyTempoButton.addEventListener('click', applyTempo);
     ui.controls.addTrackButton.addEventListener('click', addTrack);
     ui.controls.delTrackButton.addEventListener('click', delTrack);
@@ -113,35 +111,30 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         }
 
         sound.addPattern(pattern);
-        // TODO: Fix this private call
-        sound.currentPattern = pattern;
-        sound._configureRouting();
 
-        ui.controls.playPatternButton.disabled = false;
+        ui.controls.playSongButton.disabled = false;
     }
 
-    function playPattern() {
-        var pattern = sound.getPattern(currentPatternIndex);
-        if ( pattern ) {
-            sound.playPattern(pattern);
-            ui.controls.stopPatternButton.disabled = false;
-        }
+    function playSong() {
+        sound.playSong();
+        ui.controls.playSongButton.blur();
     }
 
-    function stopPattern() {
+    function stopSong() {
         sound.playing = false;
-        ui.controls.stopPatternButton.disabled = true;
+        sound.playingSong = false;
+        ui.controls.stopSongButton.disabled = true;
     }
 
     function applyTempo() {
-        var pattern = sound.getPattern(currentPatternIndex);
+        var pattern = sound.getPattern(sound.currentPattern);
         if ( pattern ) {
             pattern.setTempo(parseInt(ui.controls.tempoTextField.value));
         }
     }
 
     function addTrack() {
-        var pattern = sound.getPattern(currentPatternIndex);
+        var pattern = sound.getPattern(sound.currentPattern);
         if ( pattern ) {
             pattern.setTrackCount( pattern.getTrackCount()+1 );
         }
@@ -151,7 +144,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     }
 
     function delTrack() {
-        var pattern = sound.getPattern(currentPatternIndex);
+        var pattern = sound.getPattern(sound.currentPattern);
         if ( pattern ) {
             pattern.setTrackCount( pattern.getTrackCount()-1 );
         }
@@ -160,21 +153,21 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     }
 
     function nextPattern() {
-        var pattern = sound.getPattern(currentPatternIndex+1);
+        var pattern = sound.getPattern(sound.currentPattern+1);
         if ( pattern ) {
-            currentPatternIndex++;
-            sound.currentPattern = pattern;
+            sound.currentPattern++;
+            sound.setCurrentPattern(sound.currentPattern);
         }
-        console.log('currentPatternIndex: %s', currentPatternIndex);
+        console.log('sound.currentPattern: %s', sound.currentPattern);
     }
 
     function prevPattern() {
-        var pattern = sound.getPattern(currentPatternIndex-1);
+        var pattern = sound.getPattern(sound.currentPattern-1);
         if ( pattern ) {
-            currentPatternIndex--;
-            sound.currentPattern = pattern;
+            sound.currentPattern--;
+            sound.setCurrentPattern(sound.currentPattern);
         }
-        console.log('currentPatternIndex: %s', currentPatternIndex);
+        console.log('sound.currentPattern: %s', sound.currentPattern);
     }
 
 });

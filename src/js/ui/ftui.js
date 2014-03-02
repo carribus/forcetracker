@@ -9,7 +9,7 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
         this.controls = {
             patternEditor: null,
             createPatternButton: null,
-            playPatternButton: null,
+            playSongButton: null,
             tempoTextField: null,
             applyTempoButton: null,
             addTrackButton: null,
@@ -51,10 +51,10 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
         this.controls.patternEditor = new PatternEditor(this.display, {left: 250, top: 150, right: 10, bottom: 50} );
         this.controls.sampleList = new SampleList(this.display, {left: 10, top: 150, width: 230, bottom: 50}, this);
         this.controls.createPatternButton = createElement('button', 'Create Drum Pattern', 10, 20, 100, 50);
-        this.controls.playPatternButton = createElement('button', 'Play the Shizzle!', 120, 20, 120, 25);
-        this.controls.playPatternButton.disabled = true;
-        this.controls.stopPatternButton = createElement('button', 'Stop the Nizzle!', 120, 45, 120, 25);
-        this.controls.stopPatternButton.disabled = true;
+        this.controls.playSongButton = createElement('button', 'Play the Shizzle!', 120, 20, 120, 25);
+        this.controls.playSongButton.disabled = true;
+        this.controls.stopSongButton = createElement('button', 'Stop the Nizzle!', 120, 45, 120, 25);
+        this.controls.stopSongButton.disabled = true;
         this.controls.tempoTextField = createElement('input', null, 250, 20, 50, 16);
         this.controls.applyTempoButton = createElement('button', 'Apply Tempo', 310, 20, 100, 22);
         this.controls.delTrackButton = createElement('button', '-', 504, 20, 30, 22);
@@ -96,17 +96,17 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
         window.addEventListener('keyup', this.inputHandler.onKeyUp);
     }
 
-    ftUI.prototype._playPattern = function() {
-        var pattern = this.soundSystem.currentPattern;
-        if ( pattern ) {
-            if ( !this.soundSystem.playing ) {
-                this.soundSystem.playPattern(pattern);
-                this.controls.stopPatternButton.disabled = false;
-            } else {
-                this.soundSystem.playing = false;
-            }
-        }
-    }
+//    ftUI.prototype._playPattern = function() {
+//        var pattern = this.soundSystem.currentPattern;
+//        if ( pattern ) {
+//            if ( !this.soundSystem.playing ) {
+//                this.soundSystem.playPattern(pattern);
+//                this.controls.stopSongButton.disabled = false;
+//            } else {
+//                this.soundSystem.playing = false;
+//            }
+//        }
+//    }
 
     ftUI.prototype.startSampleUpload = function(fileArray) {
         var _this = this;
@@ -130,7 +130,7 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
 
     ftUI.prototype.render = function() {
         if ( this.display) {
-            var pattern = this.soundSystem.currentPattern;
+            var pattern = this.soundSystem.getCurrentPattern();
             if ( pattern ) {
                 if ( this.controls.tempoTextField.value.length == 0 ) {
                     this.controls.tempoTextField.value = pattern.tempo.toString();
@@ -151,7 +151,7 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
     //
     function drawTracker() {
         var ctx = this.display.context;
-        var pattern = this.soundSystem.currentPattern;
+        var pattern = this.soundSystem.getCurrentPattern();
 
         ctx.save();
 
@@ -177,8 +177,10 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
                     width: trackWidth,
                     height: 40
                 };
-                this.visualisers.tracks[i].setAnalyserNode(this.soundSystem.trackRoutes[i].analyser);
-                this.visualisers.tracks[i].render();
+                if ( this.soundSystem.trackRoutes ) {
+                    this.visualisers.tracks[i].setAnalyserNode(this.soundSystem.trackRoutes[i].analyser);
+                    this.visualisers.tracks[i].render();
+                }
             }
         }
 

@@ -1,6 +1,9 @@
 define('ui/inputhandler', [], function() {
 
     function InputHandler(ui) {
+        var _this = this;
+        this.soundSystem = ui.soundSystem;
+
         this.onMouseDown = function(e) {
             console.log('InputHandler: onMouseDown: %s', e.button);
             if (e.button == 0) { // left click
@@ -28,11 +31,21 @@ define('ui/inputhandler', [], function() {
         }
 
         this.onKeyDown = function(e) {
-//            console.log('InputHandler: onKeyDown: %s', e.keyCode);
+            console.log('InputHandler: onKeyDown: %s', e.keyCode);
             if ( ui.focusControl ) {
                 if (e.keyCode == InputHandler.KEYS.VK_SPACE ) {
-                    ui._playPattern();
+                    if ( _this.soundSystem.playing ) {
+                        _this.soundSystem.playing = false;
+                    } else {
+                        if (e.ctrlKey || e.metaKey ) {
+                            _this.soundSystem.playSong();
+                        } else {
+                            _this.soundSystem.playingSong = false;
+                            _this.soundSystem.playPattern();
+                        }
+                    }
                 }
+
                 ui.focusControl.onKeyDown(e);
             } else {
                 console.log('No control has keyboard focus');
@@ -50,7 +63,9 @@ define('ui/inputhandler', [], function() {
         VK_RIGHT: 39,
         VK_UP: 38,
         VK_DOWN: 40,
-        VK_DELETE: 46
+        VK_DELETE: 46,
+        VK_PLUS: 107,
+        VK_MINUS: 109
     }
 
     InputHandler.isNoteKey = function(keyCode) {

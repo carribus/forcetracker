@@ -6,9 +6,10 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
         this.patterns = [];
         this.trackRoutes = null;
 
-        this.currentPattern = null;
+        this.currentPattern = 0;
         this.currentNote = 0;
         this.playing = false;
+        this.playingSong = false;
         this.lastTick = 0;
 
         try {
@@ -75,6 +76,15 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
         return pattern;
     }
 
+    SoundSystem.prototype.getCurrentPattern = function() {
+        return this.patterns[this.currentPattern];
+    }
+
+    SoundSystem.prototype.setCurrentPattern = function(patternIndex) {
+        this.currentPattern = patternIndex;
+        this._configureRouting();
+    }
+
     SoundSystem.prototype.getPatternCount = function() {
         return this.patterns.length;
     }
@@ -83,9 +93,11 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
         return this.patterns[index];
     }
 
-    SoundSystem.prototype.playPattern = function(pattern) {
-        if ( pattern && pattern instanceof Pattern) {
-            this.currentPattern = pattern;
+    SoundSystem.prototype.playPattern = function(patternIndex) {
+        patternIndex = patternIndex != undefined ? patternIndex : this.currentPattern
+        var pattern = this.getPattern(patternIndex);
+        if ( pattern instanceof Pattern) {
+            this.currentPattern = patternIndex;
             this._configureRouting();
             this.currentNote = 0;
 
@@ -93,8 +105,13 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
         }
     }
 
+    SoundSystem.prototype.playSong = function() {
+        this.playingSong = true;
+        this.playPattern(0);
+    }
+
     SoundSystem.prototype.onTick = function(dt) {
-        var pattern = this.currentPattern;
+        var pattern = this.getCurrentPattern();
         var timePerNote, track, note, source
 
         if ( pattern && this.playing ) {
@@ -107,31 +124,39 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
                         // if we have a note to play, do it
                         source = this._createBufferNode(note);
                         if ( source ) {
-                            /*
-                                TODO: If you want to terminate the currently playing note, perhaps you should
-                                perform a 'noteOff()' call before reconnecting the next sound
-                            */
+                            if ( this.trackRoutes[i].source ) {
+                                this.trackRoutes[i].source.stop(0);
+                            }
+                            // reference the new source node
+                            this.trackRoutes[i].source = source;
                             // connect the node to the appropriate channel's gainNode
                             source.connect(this.trackRoutes[i].gain);
                             this.trackRoutes[i].gain.gain.value = (note.volume ? note.volume : 255) / 255;
-                            source.noteOn(0);
+                            source.start(0);
                         } else {
                             if ( note.volume != null ) {
                                 this.trackRoutes[i].gain.gain.value = note.volume / 255;
                             }
                         }
-                        if ( i == 4 ) {
-                            console.log(this.trackRoutes[i].gain.gain.value);
-                        }
                     }
                 }
-                if ( this.currentNote < pattern.getNotesPerTrack() ) {
+                if ( this.currentNote < pattern.getNotesPerTrack()-1 ) {
                     this.currentNote++;
                 } else {
-                    this.playing = false;
+                    if ( this.playingSong ) {
+                        if ( this.currentPattern < this.patterns.length-1 ) {
+                            this.currentPattern++;
+                            this.currentNote = 0;
+                            this._configureRouting();
+                        } else {
+                            this.playing = this.playingSong = false;
+                        }
+                    } else {
+                        this.playing = false;
+                    }
                 }
 
-                this.lastTick = dt;
+                 this.lastTick = dt;
             }
         }
     }
@@ -167,43 +192,67 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
      * @private
      */
     SoundSystem.prototype._configureRouting = function() {
-        var volNode, pannerNode, analyserNode;
+        if ( this.currentPattern >= 0) {
+            var numTracks = this.getCurrentPattern().getTrackCount();
 
-        if ( this.currentPattern ) {
-            var numTracks = this.currentPattern.getTrackCount();
-
-            if ( !this.trackRoutes || numTracks != this.trackRoutes.length ) {
-                console.log('Reconfiguring routing for pattern')
-                this._clearRouting();
+            if ( !this.trackRoutes ) {
+//                console.log('Configuring routing for pattern')
                 this.trackRoutes = [];
                 for ( var i = 0; i < numTracks; i++ ) {
-                    volNode = this._createVolumeNode();
-                    pannerNode = this._createPannerNode();
-                    analyserNode = this._createAnalyserNode();
-                    volNode.connect(pannerNode);
-                    pannerNode.connect(analyserNode);
-                    analyserNode.connect(this.context.destination);
-                    analyserNode.fftSize = 64;
-                    this.trackRoutes[i] = {
-                        gain: volNode,
-                        panner: pannerNode,
-                        analyser: analyserNode
-                    };
+                    this._addRouteForTrack(i);
                 }
             } else {
-                console.log('Routing for pattern stays the same');
+                if ( this.trackRoutes.length != numTracks ) {
+//                    console.log('Reconfiguring routing for pattern: %s tracks to %s tracks', this.trackRoutes.length, numTracks);
+                    this._updateRouting(numTracks);
+                } else {
+//                    console.log('Routing for pattern stays the same');
+                }
             }
         }
     }
 
-    SoundSystem.prototype._clearRouting = function() {
+    SoundSystem.prototype._addRouteForTrack = function(trackIndex) {
+        var volNode, pannerNode, analyserNode;
+
+        volNode = this._createVolumeNode();
+        pannerNode = this._createPannerNode();
+        analyserNode = this._createAnalyserNode();
+        volNode.connect(pannerNode);
+        pannerNode.connect(analyserNode);
+        analyserNode.connect(this.context.destination);
+        analyserNode.fftSize = 64;
+        this.trackRoutes[trackIndex] = {
+            gain: volNode,
+            panner: pannerNode,
+            analyser: analyserNode
+        };
+    }
+
+    SoundSystem.prototype._updateRouting = function(numTracks) {
         if ( this.trackRoutes && this.trackRoutes.length ) {
-            console.log('Clearing %s track routes', this.trackRoutes.length);
-            for ( var i = 0, len = this.trackRoutes.length; i < len; i++ ) {
-                this.trackRoutes[i].gain.disconnect();
-                this.trackRoutes[i].panner.disconnect();
-                this.trackRoutes[i].analyser.disconnect();
+            if ( numTracks > this.trackRoutes.length ) {
+                for ( var i = this.trackRoutes.length; i < numTracks; i++ ) {
+                    this._addRouteForTrack(i);
+                }
+            } else if ( numTracks < this.trackRoutes.length ) {
+                // disconnect the nodes
+                for ( var i = this.trackRoutes.length-1; i >= numTracks; i-- ) {
+                    this._clearRoutingForTrack(i+1);
+                }
+                this.trackRoutes.splice(numTracks-1, this.trackRoutes.length - numTracks);
             }
+        }
+    }
+
+    SoundSystem.prototype._clearRoutingForTrack = function(trackIndex) {
+        if ( this.trackRoutes && this.trackRoutes.length > trackIndex) {
+            if ( this.trackRoutes[trackIndex].source ) {
+                this.trackRoutes[trackIndex].source.disconnect();
+            }
+            this.trackRoutes[trackIndex].gain.disconnect();
+            this.trackRoutes[trackIndex].panner.disconnect();
+            this.trackRoutes[trackIndex].analyser.disconnect();
         }
     }
 
