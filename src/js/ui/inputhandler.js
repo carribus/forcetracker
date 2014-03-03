@@ -33,17 +33,31 @@ define('ui/inputhandler', [], function() {
         this.onKeyDown = function(e) {
             console.log('InputHandler: onKeyDown: %s', e.keyCode);
             if ( ui.focusControl ) {
-                if (e.keyCode == InputHandler.KEYS.VK_SPACE ) {
-                    if ( _this.soundSystem.playing ) {
-                        _this.soundSystem.playing = false;
-                    } else {
-                        if (e.ctrlKey || e.metaKey ) {
-                            _this.soundSystem.playSong();
+                switch (e.keyCode) {
+                    case    InputHandler.KEYS.VK_SPACE:
+                        if ( _this.soundSystem.playing ) {
+                            _this.soundSystem.playing = false;
                         } else {
-                            _this.soundSystem.playingSong = false;
-                            _this.soundSystem.playPattern();
+                            if (e.ctrlKey || e.metaKey ) {
+                                _this.soundSystem.playSong();
+                            } else {
+                                _this.soundSystem.playingSong = false;
+                                _this.soundSystem.playPattern();
+                            }
                         }
-                    }
+                        break;
+
+                    case    InputHandler.KEYS.VK_BRACKET_SQUARE_OPEN:
+                        if (e.ctrlKey) {
+                            _this.soundSystem.setCurrentPattern( _this.soundSystem.currentPattern-1 );
+                        }
+                        break;
+
+                    case    InputHandler.KEYS.VK_BRACKET_SQUARE_CLOSE:
+                        if (e.ctrlKey) {
+                            _this.soundSystem.setCurrentPattern( _this.soundSystem.currentPattern+1 );
+                        }
+                        break;
                 }
 
                 ui.focusControl.onKeyDown(e);
@@ -65,7 +79,9 @@ define('ui/inputhandler', [], function() {
         VK_DOWN: 40,
         VK_DELETE: 46,
         VK_PLUS: 107,
-        VK_MINUS: 109
+        VK_MINUS: 109,
+        VK_BRACKET_SQUARE_OPEN: 219,
+        VK_BRACKET_SQUARE_CLOSE: 221
     }
 
     InputHandler.isNoteKey = function(keyCode) {

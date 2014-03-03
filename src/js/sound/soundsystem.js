@@ -81,8 +81,10 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
     }
 
     SoundSystem.prototype.setCurrentPattern = function(patternIndex) {
-        this.currentPattern = patternIndex;
-        this._configureRouting();
+        if ( patternIndex >= 0 && patternIndex <= this.patterns.length-1 ) {
+            this.currentPattern = patternIndex;
+            this._configureRouting();
+        }
     }
 
     SoundSystem.prototype.getPatternCount = function() {

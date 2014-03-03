@@ -51,10 +51,12 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
         this.controls.patternEditor = new PatternEditor(this.display, {left: 250, top: 150, right: 10, bottom: 50} );
         this.controls.sampleList = new SampleList(this.display, {left: 10, top: 150, width: 230, bottom: 50}, this);
         this.controls.createPatternButton = createElement('button', 'Create Drum Pattern', 10, 20, 100, 50);
-        this.controls.playSongButton = createElement('button', 'Play the Shizzle!', 120, 20, 120, 25);
+        this.controls.playSongButton = createElement('button', 'Play Song', 120, 20, 120, 25);
+        this.controls.playSongButton.title = 'Play Song\nShortcut: Ctrl-Space';
         this.controls.playSongButton.disabled = true;
-        this.controls.stopSongButton = createElement('button', 'Stop the Nizzle!', 120, 45, 120, 25);
-        this.controls.stopSongButton.disabled = true;
+        this.controls.playPatternButton = createElement('button', 'Play Pattern', 120, 45, 120, 25);
+        this.controls.playPatternButton.title = 'Play Pattern\nShortcut: Space';
+        this.controls.playPatternButton.disabled = true;
         this.controls.tempoTextField = createElement('input', null, 250, 20, 50, 16);
         this.controls.applyTempoButton = createElement('button', 'Apply Tempo', 310, 20, 100, 22);
         this.controls.delTrackButton = createElement('button', '-', 504, 20, 30, 22);
@@ -63,10 +65,12 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
         this.controls.trackCountTextField.setAttribute('readonly', true);
         this.controls.addTrackButton = createElement('button', '+', 572, 20, 30, 22);
         this.controls.prevPatternButton = createElement('button', '<', 504, 50, 30, 22);
+        this.controls.prevPatternButton.title = 'Previous Pattern\nShortcut: Ctrl-[';
         this.controls.patternIndicatorField = createElement('input', null, 535, 50, 30, 16);
         this.controls.patternIndicatorField.style.textAlign = 'center';
         this.controls.patternIndicatorField.setAttribute('readonly', true);
         this.controls.nextPatternButton = createElement('button', '>', 572, 50, 30, 22);
+        this.controls.nextPatternButton.title = 'Next Pattern\nShortcut: Ctrl-]';
 
         var o = createElement('div', 'Tracks: ', 450, 23, 50, 16);
         o.style.color = 'lightgrey';
@@ -101,7 +105,7 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
 //        if ( pattern ) {
 //            if ( !this.soundSystem.playing ) {
 //                this.soundSystem.playPattern(pattern);
-//                this.controls.stopSongButton.disabled = false;
+//                this.controls.playPatternButton.disabled = false;
 //            } else {
 //                this.soundSystem.playing = false;
 //            }

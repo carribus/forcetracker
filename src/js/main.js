@@ -54,6 +54,8 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         createPattern();
         createPattern();
         sound.setCurrentPattern(0);
+        ui.controls.playSongButton.disabled =
+            ui.controls.playPatternButton.disabled = false;
     }
 
     window.requestAnimationFrame(update);
@@ -66,7 +68,7 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
 
     ui.controls.createPatternButton.addEventListener('click', createPattern);
     ui.controls.playSongButton.addEventListener('click', playSong);
-    ui.controls.stopSongButton.addEventListener('click', stopSong);
+    ui.controls.playPatternButton.addEventListener('click', playPattern);
     ui.controls.applyTempoButton.addEventListener('click', applyTempo);
     ui.controls.addTrackButton.addEventListener('click', addTrack);
     ui.controls.delTrackButton.addEventListener('click', delTrack);
@@ -111,8 +113,6 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         }
 
         sound.addPattern(pattern);
-
-        ui.controls.playSongButton.disabled = false;
     }
 
     function playSong() {
@@ -120,10 +120,9 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
         ui.controls.playSongButton.blur();
     }
 
-    function stopSong() {
-        sound.playing = false;
-        sound.playingSong = false;
-        ui.controls.stopSongButton.disabled = true;
+    function playPattern() {
+        sound.playPattern();
+        ui.controls.playPatternButton.blur();
     }
 
     function applyTempo() {

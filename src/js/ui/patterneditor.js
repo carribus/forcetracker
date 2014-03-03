@@ -195,11 +195,11 @@ define('ui/patterneditor', ['ui/component', 'ui/inputhandler', 'sound/note'], fu
         }
 
         this.scrollOffset.y += yOffset;
-        if ( this.scrollOffset.y < 0 ) {
-            this.scrollOffset.y = 0;
-        }
         if ( this.scrollOffset.y + visibleNotes > this.pattern.getNotesPerTrack() ) {
             this.scrollOffset.y = this.pattern.getNotesPerTrack() - visibleNotes;
+        }
+        if ( this.scrollOffset.y < 0 ) {
+            this.scrollOffset.y = 0;
         }
     }
 
