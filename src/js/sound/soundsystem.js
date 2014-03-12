@@ -107,6 +107,19 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
         }
     }
 
+    SoundSystem.prototype.clonePattern = function(patternIndex) {
+        patternIndex = patternIndex != undefined ? patternIndex : this.currentPattern;
+        var pattern = this.getPattern(patternIndex);
+        var newPattern;
+
+        if ( pattern && pattern instanceof Pattern ) {
+            newPattern = new Pattern();
+            pattern.copyTo(newPattern);
+        }
+
+        return newPattern;
+    }
+
     SoundSystem.prototype.playSong = function() {
         this.playingSong = true;
         this.playPattern(0);

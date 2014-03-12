@@ -37,5 +37,18 @@ define('sound/track', function() {
         this.setNote(index, null);
     }
 
+    Track.prototype.copyTo = function(target) {
+        var note, newNote;
+        if ( target && target !== this && target instanceof Track ) {
+            for ( var i = 0, len = this.notes.length; i < len; i++ ) {
+                note = this.getNote(i);
+                if ( note ) {
+                    newNote = note.clone();
+                    target.setNote(i, newNote);
+                }
+            }
+        }
+    }
+
     return Track;
 })

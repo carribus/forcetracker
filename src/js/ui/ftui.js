@@ -17,7 +17,9 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
             delTrackButton: null,
             prevPatternButton: null,
             patternIndicatorField: null,
-            nextPatternButton: null
+            nextPatternButton: null,
+            addPatternButton: null,
+            dupPatternButton: null
         }
         this.visualisers = {
             tracks: [],
@@ -71,6 +73,9 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
         this.controls.patternIndicatorField.setAttribute('readonly', true);
         this.controls.nextPatternButton = createElement('button', '>', 572, 50, 30, 22);
         this.controls.nextPatternButton.title = 'Next Pattern\nShortcut: Ctrl-]';
+        this.controls.addPatternButton = createElement('button', '+', 602, 50, 30, 22);
+        this.controls.addPatternButton.title = 'Add Pattern\nShortcut: Ctrl-Shift-+';
+        this.controls.dupPatternButton = createElement('button', 'Dupe', 504, 73, 99, 22);
 
         var o = createElement('div', 'Tracks: ', 450, 23, 50, 16);
         o.style.color = 'lightgrey';

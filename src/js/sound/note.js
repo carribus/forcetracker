@@ -49,5 +49,16 @@ define('sound/note', [], function() {
         return this.noteName + (this.isSharp ? '#' : '-') + this.octave;
     }
 
+    Note.prototype.clone = function() {
+        var newNote = new Note();
+        newNote.noteName = this.noteName;
+        newNote.isSharp = this.isSharp;
+        newNote.octave = this.octave;
+        newNote.volume = this.volume;
+        newNote.sampleID = this.sampleID;
+
+        return newNote;
+    }
+
     return Note;
 })

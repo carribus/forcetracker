@@ -86,5 +86,17 @@ define('sound/pattern', ['sound/track'], function(Track) {
         }
     }
 
+    Pattern.prototype.copyTo = function(target) {
+        if ( target && target !== this && target instanceof Pattern ) {
+            target.setTrackCount(this.getTrackCount());
+            target.setNotesPerTrack(this.getNotesPerTrack());
+            target.setTempo(this.getTempo());
+
+            for ( var i = 0, len = this.getTrackCount(); i < len; i++ ) {
+                this.getTrack(i).copyTo(target.getTrack(i));
+            }
+        }
+    }
+
     return Pattern;
 })

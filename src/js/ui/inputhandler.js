@@ -1,4 +1,4 @@
-define('ui/inputhandler', [], function() {
+define('ui/inputhandler', ['sound/pattern'], function(Pattern) {
 
     function InputHandler(ui) {
         var _this = this;
@@ -58,6 +58,18 @@ define('ui/inputhandler', [], function() {
                             _this.soundSystem.setCurrentPattern( _this.soundSystem.currentPattern+1 );
                         }
                         break;
+
+                    case    InputHandler.KEYS.VK_PLUS:
+                        if (e.ctrlKey && e.shiftKey) {
+                            var currentPattern = _this.soundSystem.getCurrentPattern();
+                            var newPattern = new Pattern();
+
+                            newPattern.setNotesPerTrack(currentPattern.getNotesPerTrack());
+                            newPattern.setTrackCount(currentPattern.getTrackCount());
+                            newPattern.setTempo(currentPattern.getTempo());
+                            _this.soundSystem.addPattern(newPattern);
+                            _this.soundSystem.setCurrentPattern(_this.soundSystem.getPatternCount()-1);
+                        }
                 }
 
                 ui.focusControl.onKeyDown(e);
