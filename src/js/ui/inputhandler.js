@@ -7,9 +7,15 @@ define('ui/inputhandler', ['sound/pattern'], function(Pattern) {
         this.onMouseDown = function(e) {
             console.log('InputHandler: onMouseDown: %s', e.button);
             if (e.button == 0) { // left click
+                ui.focusControl = null;
                 if ( ui.controls.patternEditor.containsPoint(e.clientX, e.clientY) ) {
                     ui.focusControl = ui.controls.patternEditor;
-                    ui.controls.patternEditor.onClick(e.clientX, e.clientY);
+                } else if ( ui.controls.sampleList.containsPoint(e.clientX, e.clientY) ) {
+                    ui.focusControl = ui.controls.sampleList;
+                }
+
+                if ( ui.focusControl ) {
+                    ui.focusControl.onClick(e.clientX, e.clientY);
                 }
             }
         }

@@ -43,7 +43,11 @@ define('ui/samplelist', ['ui/component'], function(Component) {
     SampleList.prototype.constructor = SampleList;
 
     SampleList.prototype.onClick = function(x, y) {
-        console.log('Sample List clicked');
+        var sampleIndex = this.getSampleAt(x, y);
+
+        if ( sampleIndex >= 0 && sampleIndex < this.ui.soundSystem.sampleBank.length ) {
+            this.ui.soundSystem.playSample(sampleIndex);
+        }
     }
 
     SampleList.prototype.onKeyDown = function(e) {
@@ -74,6 +78,14 @@ define('ui/samplelist', ['ui/component'], function(Component) {
         if ( this.ui ) {
             this.ui.startSampleUpload(acceptedFiles);
         }
+    }
+
+    SampleList.prototype.getSampleAt = function(x, y) {
+        var sampleBank = this.ui.soundSystem.sampleBank;
+        var itemHeight = this.fonts.item.size + 10;
+        var itemIndex = Math.floor( (y - this.fonts.header.size - 10 - this.rect.y) / itemHeight);
+
+        return itemIndex;
     }
 
     /**

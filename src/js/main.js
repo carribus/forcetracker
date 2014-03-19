@@ -76,6 +76,8 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
     ui.controls.prevPatternButton.addEventListener('click', prevPattern);
     ui.controls.addPatternButton.addEventListener('click', addPattern);
     ui.controls.dupPatternButton.addEventListener('click', duplicatePattern);
+    ui.controls.saveSongButton.addEventListener('click', saveSong);
+    ui.controls.loadSongButton.addEventListener('click', loadSong);
 
     function createPattern() {
         var pattern = new Pattern();
@@ -188,6 +190,13 @@ require(['display', 'ui/ftui', 'sound/soundsystem', 'sound/pattern', 'sound/trac
             sound.addPattern(newPattern);
             sound.setCurrentPattern(sound.getPatternCount()-1);
         }
+    }
+
+    function saveSong() {
+    }
+
+    function loadSong() {
+
     }
 
 });

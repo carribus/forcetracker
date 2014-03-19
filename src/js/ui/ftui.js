@@ -19,7 +19,10 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
             patternIndicatorField: null,
             nextPatternButton: null,
             addPatternButton: null,
-            dupPatternButton: null
+            dupPatternButton: null,
+
+            saveSongButton: null,
+            loadSongButton: null
         }
         this.visualisers = {
             tracks: [],
@@ -76,6 +79,8 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
         this.controls.addPatternButton = createElement('button', '+', 602, 50, 30, 22);
         this.controls.addPatternButton.title = 'Add Pattern\nShortcut: Ctrl-Shift-+';
         this.controls.dupPatternButton = createElement('button', 'Dupe', 504, 73, 99, 22);
+        this.controls.saveSongButton = createElement('button', 'Save', 800, 20, 50, 22);
+        this.controls.loadSongButton = createElement('button', 'Load', 800, 45, 50, 22);
 
         var o = createElement('div', 'Tracks: ', 450, 23, 50, 16);
         o.style.color = 'lightgrey';
@@ -104,18 +109,6 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
         window.addEventListener('keydown', this.inputHandler.onKeyDown);
         window.addEventListener('keyup', this.inputHandler.onKeyUp);
     }
-
-//    ftUI.prototype._playPattern = function() {
-//        var pattern = this.soundSystem.currentPattern;
-//        if ( pattern ) {
-//            if ( !this.soundSystem.playing ) {
-//                this.soundSystem.playPattern(pattern);
-//                this.controls.playPatternButton.disabled = false;
-//            } else {
-//                this.soundSystem.playing = false;
-//            }
-//        }
-//    }
 
     ftUI.prototype.startSampleUpload = function(fileArray) {
         var _this = this;
@@ -168,7 +161,7 @@ define('ui/ftui', ['ui/inputhandler', 'ui/patterneditor', 'ui/samplelist', 'ui/v
 
         var str = this.soundSystem.sampleBank.length + ' samples loaded';
         ctx.fillStyle = 'white';
-        ctx.fillText(str, 200, 10);
+        ctx.fillText(str, 10, 140);
 
         this.controls.sampleList.render(this.soundSystem.sampleBank, pattern, this.soundSystem.currentNote);
         this.controls.patternEditor.render(pattern, this.soundSystem.currentNote, this.soundSystem.playing);

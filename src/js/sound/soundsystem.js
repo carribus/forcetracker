@@ -1,10 +1,11 @@
-define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
+define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Pattern) {
 
     function SoundSystem() {
         this.context = null;
         this.sampleBank = [];
         this.patterns = [];
         this.trackRoutes = null;
+        this.sampleRoute = null;
 
         this.currentPattern = 0;
         this.currentNote = 0;
@@ -67,6 +68,42 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
         return null;
     }
 
+    SoundSystem.prototype.playSample = function(sampleIndex) {
+        var volNode, pannerNode, note, source;
+
+        // create the WebAudio route for playing the sample
+        if ( !this.sampleRoute ) {
+            volNode = this._createVolumeNode();
+            pannerNode = this._createPannerNode();
+            volNode.connect(pannerNode);
+            pannerNode.connect(this.context.destination);
+            this.sampleRoute = {
+                gain: volNode,
+                panner: pannerNode
+            };
+        }
+
+        // create the note (C4)
+        note = new Note('C', false, 4, sampleIndex);
+        source = this._createBufferNode(note);
+        if ( source ) {
+            this.stopSample();
+            // reference the new source node
+            this.sampleRoute.source = source;
+            // connect the node to the appropriate channel's gainNode
+            source.connect(this.sampleRoute.gain);
+            source.start(0);
+        }
+    }
+
+    SoundSystem.prototype.stopSample = function() {
+        if ( this.sampleRoute && this.sampleRoute.source ) {
+            this.sampleRoute.source.stop(0);
+            this.sampleRoute.source.disconnect();
+            this.sampleRoute.source = null;
+        }
+    }
+
     SoundSystem.prototype.addPattern = function(pattern) {
         this.patterns.push(pattern);
     }
@@ -99,6 +136,7 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
         patternIndex = patternIndex != undefined ? patternIndex : this.currentPattern
         var pattern = this.getPattern(patternIndex);
         if ( pattern instanceof Pattern) {
+            this.stopSample();
             this.currentPattern = patternIndex;
             this._configureRouting();
             this.currentNote = 0;
@@ -122,6 +160,7 @@ define('sound/soundsystem', ['sound/pattern'], function(Pattern) {
 
     SoundSystem.prototype.playSong = function() {
         this.playingSong = true;
+        this.stopSample();
         this.playPattern(0);
     }
 
