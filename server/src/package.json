@@ -1,15 +1,15 @@
 {
-    "name": "ForceTrackerServer",
-    "version": "0.0.1",
-    "description": "Backend system for ForceTracker",
-    "main": "ftserver.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "Peter Mares",
-    "license": "MIT",
-    "dependencies": {
-        "request": "~2.33.0",
-        "colors": "~0.6.2"
-    }
+  "name": "ForceTrackerServer",
+  "version": "0.0.1",
+  "description": "Backend system for ForceTracker",
+  "main": "ftserver.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Peter Mares",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "~0.6.2",
+    "restify": "~2.6.3"
+  }
 }
