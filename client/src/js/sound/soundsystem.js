@@ -311,7 +311,7 @@ define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Patt
     }
 
     SoundSystem.prototype._createVolumeNode = function() {
-        return this.context.createGainNode();
+        return this.context.createGain();
     }
     SoundSystem.prototype._createPannerNode = function() {
         return this.context.createPanner();
