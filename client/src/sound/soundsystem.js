@@ -1,6 +1,8 @@
-define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Pattern) {
+import { Pattern } from "./pattern.js";
+import { Note } from "./note.js";
 
-    function SoundSystem() {
+export class SoundSystem {
+    constructor() {
         this.context = null;
         this.sampleBank = [];
         this.patterns = [];
@@ -21,58 +23,63 @@ define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Patt
         }
     }
 
-    SoundSystem.prototype.loadSamples = function(samples, callback) {
-        var _this = this;
-        var counter = 0;
-        if ( Array.isArray(samples) ) {
-            for ( var i = 0, len = samples.length; i < len; i++ ) {
-                var request = new XMLHttpRequest();
-                request.responseType = 'arraybuffer';
-                request.sample = samples[i];
-                request.open('GET', samples[i].filename, true);
+    loadSamples(samples, callback) {
+        let counter = 0;
+        const createRequest = (sample) => {
+            let _this = this;
+            let request = new XMLHttpRequest();
+            request.responseType = 'arraybuffer';
+            request.sample = sample;
 
-                request.onload = function() {
-                    var _request = this;
-                    var thisSample = this.sample;
-                    _this.context.decodeAudioData(_request.response, function(buffer) {
-                        thisSample.buffer = buffer;
-                        _this.sampleBank.push(thisSample);
-                        thisSample.index = _this.sampleBank.length-1;
-                        if (++counter == samples.length) {
-                            callback(_this.sampleBank);
-                        }
-                    })
-                };
+            request.onload = function() {
+                // let _request = this;
+                let thisSample = this.sample;
+                _this.context.decodeAudioData(this.response, function (buffer) {
+                    thisSample.buffer = buffer;
+                    _this.sampleBank.push(thisSample);
+                    thisSample.index = _this.sampleBank.length - 1;
+                    if (++counter == samples.length) {
+                        callback(_this.sampleBank);
+                    }
+                })
+            };
 
-                request.onerror = function(e) {
-                    console.log('sound error: ');
-                    console.log(e);
-                    counter++;
-                }
+            request.onerror = function (e) {
+                console.log('sound error: ');
+                console.log(e);
+                counter++;
+            }
 
+            return request;
+        }
+
+        if (Array.isArray(samples)) {
+            for (let s of samples) {
+                let request = createRequest(s);
+                request.open('GET', s.filename, true);
                 request.send();
             }
         }
     }
 
-    SoundSystem.prototype.getSample = function(sampleName) {
-        if ( typeof sampleName == 'string' ) {
-            for ( var i = 0, len = this.sampleBank.length; i < len; i++ ) {
-                if ( this.sampleBank[i].name == sampleName ) {
+    getSample(sampleName) {
+        if (typeof sampleName == 'string') {
+            for (let i = 0, len = this.sampleBank.length; i < len; i++) {
+                if (this.sampleBank[i].name == sampleName) {
                     return this.sampleBank[i];
                 }
             }
-        } else if ( typeof sampleName == 'number') {
+        } else if (typeof sampleName == 'number') {
             return this.sampleBank[sampleName];
         }
         return null;
     }
 
-    SoundSystem.prototype.playSample = function(sampleIndex) {
-        var volNode, pannerNode, note, source;
+    playSample(sampleIndex) {
+        let volNode, pannerNode, note, source;
 
         // create the WebAudio route for playing the sample
-        if ( !this.sampleRoute ) {
+        if (!this.sampleRoute) {
             volNode = this._createVolumeNode();
             pannerNode = this._createPannerNode();
             volNode.connect(pannerNode);
@@ -86,7 +93,7 @@ define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Patt
         // create the note (C4)
         note = new Note('C', false, 4, sampleIndex);
         source = this._createBufferNode(note);
-        if ( source ) {
+        if (source) {
             this.stopSample();
             // reference the new source node
             this.sampleRoute.source = source;
@@ -96,7 +103,7 @@ define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Patt
         }
     }
 
-    SoundSystem.prototype.stopSample = function() {
+    stopSample() {
         if ( this.sampleRoute && this.sampleRoute.source ) {
             this.sampleRoute.source.stop(0);
             this.sampleRoute.source.disconnect();
@@ -104,37 +111,36 @@ define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Patt
         }
     }
 
-    SoundSystem.prototype.addPattern = function(pattern) {
+    addPattern(pattern) {
         this.patterns.push(pattern);
     }
 
-    SoundSystem.prototype.removePattern = function(patternIndex) {
-        var pattern = this.patterns.splice(patternIndex, 1);
-        return pattern;
+    removePattern(patternIndex) {
+        return this.patterns.splice(patternIndex, 1);
     }
 
-    SoundSystem.prototype.getCurrentPattern = function() {
+    getCurrentPattern() {
         return this.patterns[this.currentPattern];
     }
 
-    SoundSystem.prototype.setCurrentPattern = function(patternIndex) {
+    setCurrentPattern(patternIndex) {
         if ( patternIndex >= 0 && patternIndex <= this.patterns.length-1 ) {
             this.currentPattern = patternIndex;
             this._configureRouting();
         }
     }
 
-    SoundSystem.prototype.getPatternCount = function() {
+    getPatternCount() {
         return this.patterns.length;
     }
 
-    SoundSystem.prototype.getPattern = function(index) {
+    getPattern(index) {
         return this.patterns[index];
     }
 
-    SoundSystem.prototype.playPattern = function(patternIndex) {
+    playPattern(patternIndex) {
         patternIndex = patternIndex != undefined ? patternIndex : this.currentPattern
-        var pattern = this.getPattern(patternIndex);
+        let pattern = this.getPattern(patternIndex);
         if ( pattern instanceof Pattern) {
             this.stopSample();
             this.currentPattern = patternIndex;
@@ -145,10 +151,10 @@ define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Patt
         }
     }
 
-    SoundSystem.prototype.clonePattern = function(patternIndex) {
+    clonePattern(patternIndex) {
         patternIndex = patternIndex != undefined ? patternIndex : this.currentPattern;
-        var pattern = this.getPattern(patternIndex);
-        var newPattern;
+        let pattern = this.getPattern(patternIndex);
+        let newPattern;
 
         if ( pattern && pattern instanceof Pattern ) {
             newPattern = new Pattern();
@@ -158,15 +164,15 @@ define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Patt
         return newPattern;
     }
 
-    SoundSystem.prototype.playSong = function() {
+    playSong() {
         this.playingSong = true;
         this.stopSample();
         this.playPattern(0);
     }
 
-    SoundSystem.prototype.onTick = function(dt) {
-        var pattern = this.getCurrentPattern();
-        var timePerNote, track, note, source
+    onTick(dt) {
+        let pattern = this.getCurrentPattern();
+        let timePerNote, note, source
 
         if ( pattern && this.playing ) {
             timePerNote = 60 / pattern.tempo * 100;
@@ -222,8 +228,8 @@ define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Patt
      * @returns {*}
      * @private
      */
-    SoundSystem.prototype._createBufferNode = function(note) {
-        var source;
+    _createBufferNode(note) {
+        let source;
 
         if ( note.noteName != null && note.sampleID != null ) {
             source = this.context.createBufferSource();
@@ -245,14 +251,14 @@ define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Patt
      *
      * @private
      */
-    SoundSystem.prototype._configureRouting = function() {
+    _configureRouting() {
         if ( this.currentPattern >= 0) {
-            var numTracks = this.getCurrentPattern().getTrackCount();
+            let numTracks = this.getCurrentPattern().getTrackCount();
 
             if ( !this.trackRoutes ) {
 //                console.log('Configuring routing for pattern')
                 this.trackRoutes = [];
-                for ( var i = 0; i < numTracks; i++ ) {
+                for ( let i = 0; i < numTracks; i++ ) {
                     this._addRouteForTrack(i);
                 }
             } else {
@@ -266,8 +272,8 @@ define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Patt
         }
     }
 
-    SoundSystem.prototype._addRouteForTrack = function(trackIndex) {
-        var volNode, pannerNode, analyserNode;
+    _addRouteForTrack(trackIndex) {
+        let volNode, pannerNode, analyserNode;
 
         volNode = this._createVolumeNode();
         pannerNode = this._createPannerNode();
@@ -283,15 +289,15 @@ define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Patt
         };
     }
 
-    SoundSystem.prototype._updateRouting = function(numTracks) {
+    _updateRouting(numTracks) {
         if ( this.trackRoutes && this.trackRoutes.length ) {
             if ( numTracks > this.trackRoutes.length ) {
-                for ( var i = this.trackRoutes.length; i < numTracks; i++ ) {
+                for ( let i = this.trackRoutes.length; i < numTracks; i++ ) {
                     this._addRouteForTrack(i);
                 }
             } else if ( numTracks < this.trackRoutes.length ) {
                 // disconnect the nodes
-                for ( var i = this.trackRoutes.length-1; i >= numTracks; i-- ) {
+                for ( let i = this.trackRoutes.length-1; i >= numTracks; i-- ) {
                     this._clearRoutingForTrack(i+1);
                 }
                 this.trackRoutes.splice(numTracks-1, this.trackRoutes.length - numTracks);
@@ -299,7 +305,7 @@ define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Patt
         }
     }
 
-    SoundSystem.prototype._clearRoutingForTrack = function(trackIndex) {
+    _clearRoutingForTrack(trackIndex) {
         if ( this.trackRoutes && this.trackRoutes.length > trackIndex) {
             if ( this.trackRoutes[trackIndex].source ) {
                 this.trackRoutes[trackIndex].source.disconnect();
@@ -310,16 +316,13 @@ define('sound/soundsystem', ['sound/note', 'sound/pattern'], function(Note, Patt
         }
     }
 
-    SoundSystem.prototype._createVolumeNode = function() {
+    _createVolumeNode() {
         return this.context.createGain();
     }
-    SoundSystem.prototype._createPannerNode = function() {
+    _createPannerNode() {
         return this.context.createPanner();
     }
-    SoundSystem.prototype._createAnalyserNode = function() {
+    _createAnalyserNode() {
         return this.context.createAnalyser();
     }
-
-
-    return SoundSystem;
-})
+}

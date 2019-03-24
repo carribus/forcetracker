@@ -1,27 +1,26 @@
-define('ui/component', [], function() {
-
-    function Component(display, dimensions) {
+export class Component {
+    constructor(display, dimensions) {
         this.display = display;
         this.dimensions = dimensions;
         this.rect = null;
     }
 
-    Component.prototype.containsPoint = function(x, y) {
+    containsPoint(x, y) {
         return ( x >= this.rect.x && x <= this.rect.x + this.rect.w && y >= this.rect.y && y <= this.rect.y + this.rect.h );
     }
 
-    Component.prototype.onClick = function(x, y) {
+    onClick(x, y) {
     }
 
-    Component.prototype.onKeyDown = function(e) {
+    onKeyDown(e) {
     }
 
-    Component.prototype.scroll = function(xOffset, yOffset) {
+    scroll(xOffset, yOffset) {
     }
 
-    Component.prototype.calcRect = function() {
-        var canvas;
-        var rect = { x: 0, y: 0, w: 0, h: 0 };
+    calcRect() {
+        let canvas;
+        let rect = { x: 0, y: 0, w: 0, h: 0 };
 
         if ( this.dimensions && this.display ) {
             canvas = this.display.canvas;
@@ -41,6 +40,4 @@ define('ui/component', [], function() {
 
         return rect;
     }
-
-    return Component;
-})
+}

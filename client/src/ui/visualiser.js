@@ -1,8 +1,8 @@
-define('ui/visualiser', ['ui/component'], function(Component) {
+import { Component } from "./component.js";
 
-    console.log('loading visualiser');
-    function Visualiser(display, dimensions) {
-        Component.call(this, display, dimensions);
+export class Visualiser extends Component {
+    constructor(display, dimensions) {
+        super(display, dimensions);
         this.analyser = null;
         this.colours = {
             border: 'rgb(32, 32, 32)',
@@ -11,14 +11,12 @@ define('ui/visualiser', ['ui/component'], function(Component) {
         }
         this.frequencyData = null;
     }
-    Visualiser.prototype = Object.create(Component.prototype);
-    Visualiser.prototype.constructor = Visualiser;
 
-    Visualiser.prototype.setAnalyserNode = function(analyser) {
+    setAnalyserNode(analyser) {
         this.analyser = analyser;
     }
 
-    Visualiser.prototype.render = function() {
+    render() {
         this.rect= this.calcRect();
 
         this.display.context.save();
@@ -29,8 +27,8 @@ define('ui/visualiser', ['ui/component'], function(Component) {
         this.display.context.restore();
     }
 
-    Visualiser.prototype._drawFrame = function() {
-        var ctx = this.display.context;
+    _drawFrame() {
+        let ctx = this.display.context;
 
         ctx.strokeStyle = this.colours.border;
         ctx.fillStyle = this.colours.fill;
@@ -38,25 +36,23 @@ define('ui/visualiser', ['ui/component'], function(Component) {
         ctx.strokeRect(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
     }
 
-    Visualiser.prototype._drawGraph = function() {
+    _drawGraph() {
         if ( !this.frequencyData ) {
             this.frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
         }
 
-        var segmentLength = this.rect.w / this.frequencyData.length;
-        var ctx = this.display.context;
-        var scale = this.rect.h / 255;
+        let segmentLength = this.rect.w / this.frequencyData.length;
+        let ctx = this.display.context;
+        let scale = this.rect.h / 255;
 
         this.analyser.getByteFrequencyData(this.frequencyData);
 
         ctx.strokeStyle = this.colours.graph;
         ctx.beginPath();
         ctx.moveTo(this.rect.x, this.rect.y + this.rect.h - this.frequencyData[0]*scale);
-        for ( var i = 1; i < this.frequencyData.length; i++ ) {
+        for ( let i = 1; i < this.frequencyData.length; i++ ) {
             ctx.lineTo(this.rect.x + segmentLength*i, this.rect.y + this.rect.h - this.frequencyData[i]*scale);
         }
         ctx.stroke();
     }
-
-    return Visualiser;
-})
+}
