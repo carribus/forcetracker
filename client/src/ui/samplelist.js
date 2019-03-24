@@ -1,13 +1,15 @@
-define('ui/samplelist', ['ui/component'], function(Component) {
+import { Component } from "./component.js";
 
+export class SampleList extends Component {
     /**
      * SampleList UI component
      * @param display
      * @param dimensions
+     * @param ui
      * @constructor
      */
-    function SampleList(display, dimensions, ui) {
-        Component.call(this, display, dimensions);
+    constructor(display, dimensions, ui) {
+        super(display, dimensions);
         this.ui = ui;
         this.highlightForDrop = false;
         this.headers = [
@@ -39,33 +41,31 @@ define('ui/samplelist', ['ui/component'], function(Component) {
             sampleHighlightFill: 'rgb(16,48,96)'
         }
     }
-    SampleList.prototype = Object.create(Component.prototype);
-    SampleList.prototype.constructor = SampleList;
 
-    SampleList.prototype.onClick = function(x, y) {
-        var sampleIndex = this.getSampleAt(x, y);
+    onClick(x, y) {
+        let sampleIndex = this.getSampleAt(x, y);
 
         if ( sampleIndex >= 0 && sampleIndex < this.ui.soundSystem.sampleBank.length ) {
             this.ui.soundSystem.playSample(sampleIndex);
         }
     }
 
-    SampleList.prototype.onKeyDown = function(e) {
+    onKeyDown(e) {
 
     }
 
-    SampleList.prototype.scroll = function(xOffset, yOffset) {
+    scroll(xOffset, yOffset) {
 
     }
 
-    SampleList.prototype.onDrop = function(e) {
-        var validTypes = ['audio/wav'];
-        var acceptedFiles = [];
-        var files = e.dataTransfer.files;
+    onDrop(e) {
+        let validTypes = ['audio/wav'];
+        let acceptedFiles = [];
+        let files = e.dataTransfer.files;
 
         this.highlightForDrop = false;
         if ( files.length > 0 ) {
-            for ( var i = 0; i < files.length; i++ ) {
+            for ( let i = 0; i < files.length; i++ ) {
                 if ( validTypes.indexOf(files[i].type) != -1 ) {
                     console.log('Accepting sample: %s', files[i].name);
                     acceptedFiles.push(files[i]);
@@ -80,10 +80,9 @@ define('ui/samplelist', ['ui/component'], function(Component) {
         }
     }
 
-    SampleList.prototype.getSampleAt = function(x, y) {
-        var sampleBank = this.ui.soundSystem.sampleBank;
-        var itemHeight = this.fonts.item.size + 10;
-        var itemIndex = Math.floor( (y - this.fonts.header.size - 10 - this.rect.y) / itemHeight);
+    getSampleAt(x, y) {
+        let itemHeight = this.fonts.item.size + 10;
+        let itemIndex = Math.floor( (y - this.fonts.header.size - 10 - this.rect.y) / itemHeight);
 
         return itemIndex;
     }
@@ -94,12 +93,12 @@ define('ui/samplelist', ['ui/component'], function(Component) {
      * @param pattern
      * @param currentNote
      */
-    SampleList.prototype.render = function(sampleBank, pattern, currentNote) {
-        var ctx, rect;
+    render(sampleBank, pattern, currentNote) {
+        let ctx;
 
         if ( this.display ) {
             ctx = this.display.context;
-            this.rect = rect = this.calcRect();
+            this.rect = this.calcRect();
 
             ctx.save();
 
@@ -118,7 +117,7 @@ define('ui/samplelist', ['ui/component'], function(Component) {
      * @param currentNote
      * @private
      */
-    SampleList.prototype._drawList = function(sampleBank, pattern, currentNote) {
+    _drawList(sampleBank, pattern, currentNote) {
         this._drawFrame(this.display.context, this.rect);
         this._drawHeader(this.display.context, this.rect);
         this._drawItemList(this.display.context, this.rect, sampleBank, pattern, currentNote);
@@ -130,7 +129,7 @@ define('ui/samplelist', ['ui/component'], function(Component) {
      * @param rect
      * @private
      */
-    SampleList.prototype._drawFrame = function(ctx, rect) {
+    _drawFrame(ctx, rect) {
         ctx.strokeStyle = this.highlightForDrop ? this.colours.frameStrokeDrop : this.colours.frameStroke;
         ctx.lineWidth = this.highlightForDrop ? 2.0 : 0.5;
         ctx.fillStyle = this.highlightForDrop ? this.colours.frameFillDrop : this.colours.frameFill;
@@ -144,16 +143,16 @@ define('ui/samplelist', ['ui/component'], function(Component) {
      * @param rect
      * @private
      */
-    SampleList.prototype._drawHeader = function(ctx, rect) {
-        var hRect = { x: rect.x, y: rect.y, w: rect.w, h: rect.h };
-        var lastX = rect.x;
+    _drawHeader(ctx, rect) {
+        let hRect = { x: rect.x, y: rect.y, w: rect.w, h: rect.h };
+        let lastX = rect.x;
 
         hRect.h = this.fonts.header.size + 10;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.font = this.fonts.header.size + 'px' + ' ' + this.fonts.header.name + ' ';
 
-        for ( var i = 0, len = this.headers.length; i < len; i++ ) {
+        for ( let i = 0, len = this.headers.length; i < len; i++ ) {
             hRect.x = lastX;
             hRect.w = rect.w * this.headers[i].width;
             ctx.fillStyle = this.colours.headerFill;
@@ -174,12 +173,12 @@ define('ui/samplelist', ['ui/component'], function(Component) {
      * @param currentNote
      * @private
      */
-    SampleList.prototype._drawItemList = function(ctx, rect, sampleBank, pattern, currentNote) {
-        var sampleCount = sampleBank.length;
-        var hRect = { x: rect.x, y: rect.y + this.fonts.header.size + 10, w: rect.w, h: rect.h - (this.fonts.header.size + 10) };
-        var lastX = rect.x;
-        var labels = ['index', 'name'];
-        var activeSamples = this._getCurrentActiveSamples(pattern, currentNote);
+    _drawItemList(ctx, rect, sampleBank, pattern, currentNote) {
+        let sampleCount = sampleBank.length;
+        let hRect = { x: rect.x, y: rect.y + this.fonts.header.size + 10, w: rect.w, h: rect.h - (this.fonts.header.size + 10) };
+        let lastX = rect.x;
+        let labels = ['index', 'name'];
+        let activeSamples = this._getCurrentActiveSamples(pattern, currentNote);
 
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
@@ -192,7 +191,7 @@ define('ui/samplelist', ['ui/component'], function(Component) {
 
         hRect.h = this.fonts.item.size + 10;
 
-        for ( var i = 0; i < sampleCount; i++ ) {
+        for ( let i = 0; i < sampleCount; i++ ) {
             lastX = rect.x;
 
             if ( activeSamples.indexOf(i) != -1 ) {
@@ -203,7 +202,7 @@ define('ui/samplelist', ['ui/component'], function(Component) {
                 ctx.fillStyle = this.colours.sampleText;
             }
 
-            for ( var j = 0, len = labels.length; j < len; j++ ) {
+            for ( let j = 0, len = labels.length; j < len; j++ ) {
                 hRect.x = lastX;
                 hRect.w = rect.w * this.headers[j].width;
                 switch ( labels[j] ) {
@@ -228,13 +227,13 @@ define('ui/samplelist', ['ui/component'], function(Component) {
      * @returns {Array}
      * @private
      */
-    SampleList.prototype._getCurrentActiveSamples = function(pattern, currentNote) {
-        var samples = [];
+    _getCurrentActiveSamples(pattern, currentNote) {
+        let samples = [];
         if ( pattern ) {
-            var note;
-            var trackCount = pattern.getTrackCount();
+            let note;
+            let trackCount = pattern.getTrackCount();
 
-            for ( var i = 0; i < trackCount; i++ ) {
+            for ( let i = 0; i < trackCount; i++ ) {
                 note = pattern.getNote(i, currentNote);
                 if ( note ) {
                     samples.push(note.sampleID);
@@ -244,6 +243,4 @@ define('ui/samplelist', ['ui/component'], function(Component) {
 
         return samples;
     }
-
-    return SampleList;
-})
+}

@@ -1,6 +1,5 @@
-define('sound/note', [], function() {
-
-    function Note(noteName, isSharp, octave, sampleID) {
+export class Note {
+    constructor(noteName, isSharp, octave, sampleID) {
         this.noteName = noteName;
         this.isSharp = isSharp;
         this.octave = octave;
@@ -8,17 +7,15 @@ define('sound/note', [], function() {
         this.sampleID = sampleID;
     }
 
-    Note.noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-
-    Note.prototype.getNoteName = function() {
+    getNoteName() {
         return this.noteName ? this.noteName + (this.isSharp ? '#' : '') : '..';
     }
 
-    Note.prototype.getFrequency = function() {
-        var calcDistanceFromA4 = function(note) {
-            var centerNote = { noteName: 'A', octave: 4 };
-            var distance;
-            var indexA = Note.noteNames.indexOf(note.getNoteName()), indexB = Note.noteNames.indexOf(centerNote.noteName);
+    getFrequency() {
+        const calcDistanceFromA4 = (note) => {
+            let centerNote = { noteName: 'A', octave: 4 };
+            let distance;
+            let indexA = Note.noteNames.indexOf(note.getNoteName()), indexB = Note.noteNames.indexOf(centerNote.noteName);
 
             distance = (note.octave - centerNote.octave) * 12 + (indexA - indexB);
 
@@ -28,9 +25,9 @@ define('sound/note', [], function() {
         return calcDistanceFromA4(this);
     }
 
-    Note.prototype.increment = function(semitones) {
-        var numSemitones = semitones || 1;
-        var index = Note.noteNames.indexOf(this.getNoteName());
+    increment(semitones) {
+        let numSemitones = semitones || 1;
+        let index = Note.noteNames.indexOf(this.getNoteName());
 
         // TODO: Rewrite this so that it actually works
         if ( index != -1 ) {
@@ -45,12 +42,12 @@ define('sound/note', [], function() {
         }
     }
 
-    Note.prototype.toString = function() {
+    toString() {
         return this.noteName + (this.isSharp ? '#' : '-') + this.octave;
     }
 
-    Note.prototype.clone = function() {
-        var newNote = new Note();
+    clone() {
+        let newNote = new Note();
         newNote.noteName = this.noteName;
         newNote.isSharp = this.isSharp;
         newNote.octave = this.octave;
@@ -59,6 +56,6 @@ define('sound/note', [], function() {
 
         return newNote;
     }
+}
 
-    return Note;
-})
+Note.noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
