@@ -87,7 +87,7 @@ export class InputHandler {
 
     }
 
-    isNoteKey(keyCode) {
+    static isNoteKey(keyCode) {
         const notes = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
         return (notes.indexOf(String.fromCharCode(keyCode)) != -1);
     }

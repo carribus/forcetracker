@@ -63,7 +63,8 @@ export class PatternEditor extends Component {
      * @param e KeyboardEvent
      */
     onKeyDown(e) {
-        let note, char;
+        let note;
+        let char;
 
         switch (e.keyCode) {
             case    InputHandler.KEYS.VK_LEFT:
@@ -136,8 +137,9 @@ export class PatternEditor extends Component {
                     case    4:
                     case    5:
                         let volume;
-
+                        
                         char = String.fromCharCode(e.keyCode);
+
                         if ( "0123456789ABCDEF".indexOf(char) != -1 ) {
                             note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
                             if ( !note ) {
@@ -160,8 +162,9 @@ export class PatternEditor extends Component {
                     // sample
                     case    7:
                     case    8:
-                        let char = String.fromCharCode(e.keyCode);
+                        char = String.fromCharCode(e.keyCode);
                         let sample;
+
                         if ( '0123456789'.indexOf(char) != -1 ) {
                             note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
                             if ( note ) {
