@@ -248,6 +248,28 @@ export class SoundSystem {
         return data;
     }
 
+    deserialise(data) {
+        if (data.format === "forcetracker") {
+            if (data.version !== "1.0.0") {
+                console.warn(`Expecting format 1.0.0; found ${data.version}. Could lead to unexpected behaviour...`);
+            }
+
+            // load the samples
+            for (let sample of data.samples) {
+                console.log("Loading samples");
+                this.loadSamples(data.samples, () => {
+                    // TODO: You left off here...
+                    console.log("Samples loaded");
+                    // load the patterns
+                    console.log("Loading patterns");
+                    for (let pattern of data.patterns) {
+                    }
+                });
+            }
+
+        }
+    }
+
     /**
      * Creates a BufferSource node from a pre-loaded audio sample and ensures that its playback is done at the requested
      * frequency (specified by the note)

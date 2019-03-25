@@ -40,16 +40,16 @@ window.addEventListener('load', (e) => {
         console.log('Sound System created:\n' +
             '\tSample Rate: %s', sound.context.sampleRate);
 
-        sound.loadSamples([
-            { name: 'kick', filename: 'samples/kick.wav' },
-            { name: 'cymbal', filename: 'samples/cymbal.wav' },
-            { name: 'hihat_closed', filename: 'samples/closed_hihat1.wav' },
-            { name: 'hihat_open', filename: 'samples/open_hihat1.wav' },
-            { name: 'snare1', filename: 'samples/snare1.wav' },
-            { name: 'snare2', filename: 'samples/snare2.wav' },
-            { name: 'snare3', filename: 'samples/snare3.wav' }
-        ],
-            onSamplesLoaded)
+        // sound.loadSamples([
+        //     { name: 'kick', filename: 'samples/kick.wav' },
+        //     { name: 'cymbal', filename: 'samples/cymbal.wav' },
+        //     { name: 'hihat_closed', filename: 'samples/closed_hihat1.wav' },
+        //     { name: 'hihat_open', filename: 'samples/open_hihat1.wav' },
+        //     { name: 'snare1', filename: 'samples/snare1.wav' },
+        //     { name: 'snare2', filename: 'samples/snare2.wav' },
+        //     { name: 'snare3', filename: 'samples/snare3.wav' }
+        // ],
+        //     onSamplesLoaded)
     }
 
     function onSamplesLoaded(/*sampleBank*/) {
@@ -219,7 +219,32 @@ window.addEventListener('load', (e) => {
     }
 
     function loadSong() {
-        
+        const handleFileSelect = (e) => {
+            let files = e.target.files;
+            if (files.length === 1) {
+                let reader = new FileReader();
+                console.log(`Opening song ${files[0].name}`);
+
+                reader.onload = function(e) {
+                    let data = JSON.parse(e.target.result);
+                    console.log(data);
+                    sound.deserialise(data);
+                }
+                reader.onerror = function(err) {
+                    console.error(err);
+                }
+                reader.readAsText(files[0]);
+            }
+        };
+
+        let elem = document.createElement('input');
+        elem.setAttribute('type', 'file');
+        elem.setAttribute('accept', 'application/json');
+        elem.addEventListener('change', handleFileSelect);
+        elem.style.display = 'none';
+        document.body.appendChild(elem);
+        elem.click();
+        document.body.removeChild(elem);
     }
 });
 
