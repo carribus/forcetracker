@@ -225,6 +225,29 @@ export class SoundSystem {
         }
     }
 
+    serialise() {
+        let data = {
+            format: "forcetracker",
+            version: "1.0.0",
+            numPatterns: this.patterns.length,
+            samples: [],
+            patterns: [],
+        }
+
+        for (let sample of this.sampleBank) {
+            data.samples.push({
+                name: sample.name,
+                filename: sample.filename,
+                index: sample.index
+            });
+        }
+
+        for (let pattern of this.patterns) {
+            data.patterns.push(pattern.serialise());
+        }
+        return data;
+    }
+
     /**
      * Creates a BufferSource node from a pre-loaded audio sample and ensures that its playback is done at the requested
      * frequency (specified by the note)

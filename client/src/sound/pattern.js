@@ -98,4 +98,13 @@ export class Pattern {
             }
         }
     }
+
+    serialise() {
+        let data = {
+            notesPerTrack: this.notesPerTrack,
+            tempo: this.tempo,
+            tracks: this.tracks,
+        }
+        return data;
+    }
 }

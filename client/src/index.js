@@ -200,10 +200,26 @@ window.addEventListener('load', (e) => {
     }
 
     function saveSong() {
+        let data = sound.serialise();
+        if (data) {
+            try {
+                let dataStr = JSON.stringify(data, null, 2);
+                let uriContent = "data:application/json," + encodeURIComponent(dataStr);
+                let elem = document.createElement('a');
+                elem.setAttribute('href', uriContent);
+                elem.setAttribute('download', 'song.json');
+                elem.style.display = 'none';
+                document.body.appendChild(elem);
+                elem.click();
+                document.body.removeChild(elem);
+            } catch (e) {
+                console.error(e);
+            }
+        }
     }
 
     function loadSong() {
-
+        
     }
 });
 
