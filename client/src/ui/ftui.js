@@ -23,6 +23,7 @@ export class FTUI {
             patternIndicatorField: null,
             nextPatternButton: null,
             addPatternButton: null,
+            delPatternButton: null,
             dupPatternButton: null,
 
             saveSongButton: null,
@@ -81,6 +82,8 @@ export class FTUI {
         this.controls.nextPatternButton.title = 'Next Pattern\nShortcut: Ctrl-]';
         this.controls.addPatternButton = createElement('button', '+', 602, 50, 30, 22);
         this.controls.addPatternButton.title = 'Add Pattern\nShortcut: Ctrl-Shift-+';
+        this.controls.delPatternButton = createElement('button', '-', 632, 50, 30, 22);
+        this.controls.delPatternButton.title = "Del Pattern";
         this.controls.dupPatternButton = createElement('button', 'Dupe', 504, 73, 99, 22);
         this.controls.saveSongButton = createElement('button', 'Save', 800, 20, 50, 22);
         this.controls.loadSongButton = createElement('button', 'Load', 800, 45, 50, 22);

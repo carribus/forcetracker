@@ -116,7 +116,11 @@ export class SoundSystem {
     }
 
     removePattern(patternIndex) {
-        return this.patterns.splice(patternIndex, 1);
+        let oldPattern = this.patterns.splice(patternIndex, 1);
+        if (this.currentPattern >= this.patterns.length) {
+            this.currentPattern = this.patterns.length-1;
+        }
+        return oldPattern;
     }
 
     getCurrentPattern() {
