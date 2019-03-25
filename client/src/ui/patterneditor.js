@@ -27,19 +27,16 @@ export class PatternEditor extends Component {
             editNoteFill: 'rgb(16, 64, 16)',
             editPositionFill: 'rgb(32, 96, 32)',
             editEmptyNoteText: 'rgb(128, 192, 128)',
-            emptyNoteText: 'rgb(128, 128, 128)'
+            emptyNoteText: 'rgb(128, 128, 128)',
+            selectedFill: 'rgb(16, 32, 64)',
+            selectedText: 'rgb(128, 296, 255)',
         }
         this.editPosition = {
             track: 0,
             note: 0,
             position: 0
         }
-        this.selection = {
-            startTrack: -1,
-            endTrack: -1,
-            startNote: -1,
-            endNote: -1
-        }
+        this.selection = this._resetSelection();
         this.noteHeight = this.fonts.note.size;
     }
 
@@ -66,22 +63,43 @@ export class PatternEditor extends Component {
     onKeyDown(e) {
         let note;
         let char;
+        console.log(`PatternEditor keydown: ${e.keyCode}, shift=${e.shiftKey}`)
+
+        if (e.shiftKey) {
+            if (this._isSelectionEmpty()) {
+                this._addToSelection();
+            }
+        } else {
+            this.selection = this._resetSelection();
+        }
 
         switch (e.keyCode) {
             case    InputHandler.KEYS.VK_LEFT:
-                this._navigateLeft();
+                this._navigateLeft(e.shiftKey);
+                if (e.shiftKey) {
+                    this._addToSelection();
+                }
                 break;
 
             case    InputHandler.KEYS.VK_RIGHT:
-                this._navigateRight();
+                this._navigateRight(e.shiftKey);
+                if (e.shiftKey) {
+                    this._addToSelection();
+                }
                 break;
 
             case    InputHandler.KEYS.VK_UP:
-                this._navigateUp();
+                this._navigateUp(e.shiftKey);
+                if (e.shiftKey) {
+                    this._addToSelection();
+                }
                 break;
 
             case    InputHandler.KEYS.VK_DOWN:
-                this._navigateDown();
+                this._navigateDown(e.shiftKey);
+                if (e.shiftKey) {
+                    this._addToSelection();
+                }
                 break;
 
             case    InputHandler.KEYS.VK_DELETE:
@@ -91,6 +109,14 @@ export class PatternEditor extends Component {
 
             case    InputHandler.KEYS.VK_PLUS:
                 this.pattern.insertNote(this.editPosition.track, this.editPosition.note);
+                break;
+
+            case    InputHandler.KEYS.VK_COMMA:
+                this._transpose(-1);
+                break;
+
+            case    InputHandler.KEYS.VK_PERIOD:
+                this._transpose(1)
                 break;
 
             default:
@@ -185,6 +211,12 @@ export class PatternEditor extends Component {
         }
     }
 
+    onKeyUp(e) {
+        if (e.key === "Shift") {
+            // this.selection = this._resetSelection();
+        }
+    }
+
     /**
      * Mouse wheel event handler
      * @param xOffset
@@ -228,7 +260,13 @@ export class PatternEditor extends Component {
     _drawPattern(ctx, rect, pattern, currentNote, isPlaying) {
         let track, note, noteStr;
         let visibleNotes = Math.floor((rect.h / this.fonts.note.size)-1);
-        let editedNote;
+        let editedNote, selectedNote;
+        const isNoteSelected = (track, note) => {
+            return (
+                track >= this.selection.startTrack && track <= this.selection.endTrack &&
+                note >= this.selection.startNote && note <= this.selection.endNote
+            );
+        }
 
         isPlaying = isPlaying || false;
 
@@ -277,6 +315,7 @@ export class PatternEditor extends Component {
                     //  VOLUME[00-FF]
                     //  SAMPLE ID[00-FF]
                     //  EFFECT
+                    selectedNote = isNoteSelected(i, j);
                     editedNote = ( i == this.editPosition.track && j == this.editPosition.note );
 
                     if ( j < this.scrollOffset.y ) continue;
@@ -289,10 +328,15 @@ export class PatternEditor extends Component {
                         ctx.fillRect(rect.x + i * this.trackWidth, rect.y + offset * this.fonts.note.size, this.trackWidth, this.noteHeight);
                     }
 
-                    // check if the current note in the current track is being edited
-                    if ( editedNote ) {
-                        ctx.fillStyle = this.colours.editNoteFill;
+                    if (selectedNote) {
+                        ctx.fillStyle = this.colours.selectedFill;
                         ctx.fillRect(rect.x + i * this.trackWidth, rect.y + offset * this.fonts.note.size, this.trackWidth, this.noteHeight);
+                    } else {
+                        // check if the current note in the current track is being edited
+                        if (editedNote) {
+                            ctx.fillStyle = this.colours.editNoteFill;
+                            ctx.fillRect(rect.x + i * this.trackWidth, rect.y + offset * this.fonts.note.size, this.trackWidth, this.noteHeight);
+                        }
                     }
 
                     note = track.getNote(j);
@@ -312,6 +356,8 @@ export class PatternEditor extends Component {
                         } else {
                             if ( editedNote ) {
                                 ctx.fillStyle = this.colours.editNoteText;
+                            } else if (selectedNote) {
+                                ctx.fillStyle = this.colours.selectedText;
                             } else {
                                 ctx.fillStyle = this.colours.defaultText;
                             }
@@ -365,48 +411,122 @@ export class PatternEditor extends Component {
         }
     }
 
-    _navigateLeft() {
-        if ( this.editPosition.position > 0 ) {
-            this.editPosition.position--;
-            if ( this.editPosition.position == 1 || this.editPosition.position == 3 || this.editPosition.position == 6 || this.editPosition.position == 9 ) {
+    _navigateLeft(isSelecting) {
+        if (!isSelecting) {
+            if (this.editPosition.position > 0) {
                 this.editPosition.position--;
+                if (this.editPosition.position == 1 || this.editPosition.position == 3 || this.editPosition.position == 6 || this.editPosition.position == 9) {
+                    this.editPosition.position--;
+                }
+            } else {
+                if (this.editPosition.position == 0 && (this.editPosition.track > 0)) {
+                    this.editPosition.track--;
+                    this.editPosition.position = 12;
+                }
             }
+            this._ensureNoteIsVisible(this.editPosition.track, this.editPosition.note);
         } else {
-            if ( this.editPosition.position == 0 && (this.editPosition.track > 0) ) {
-                this.editPosition.track--;
-                this.editPosition.position = 12;
-            }
+            this.editPosition.track = this.editPosition.track > 0 ? this.editPosition.track - 1 : 0;
         }
     }
 
-    _navigateRight() {
-        if ( this.editPosition.position < 12 ) {
-            this.editPosition.position++;
-            if ( this.editPosition.position == 1 || this.editPosition.position == 3 || this.editPosition.position == 6 || this.editPosition.position == 9 ) {
+    _navigateRight(isSelecting) {
+        if (!isSelecting) {
+            if (this.editPosition.position < 12) {
                 this.editPosition.position++;
+                if (this.editPosition.position == 1 || this.editPosition.position == 3 || this.editPosition.position == 6 || this.editPosition.position == 9) {
+                    this.editPosition.position++;
+                }
+            } else {
+                if (this.pattern && (this.editPosition.track < this.pattern.getTrackCount() - 1)) {
+                    this.editPosition.track++;
+                    this.editPosition.position = 0;
+                }
             }
+            this._ensureNoteIsVisible(this.editPosition.track, this.editPosition.note);
         } else {
-            if ( this.pattern && (this.editPosition.track < this.pattern.getTrackCount()-1) ) {
-                this.editPosition.track++;
+            this.editPosition.track = this.editPosition.track < 12 ? this.editPosition.track + 1 : 12;
+        }
+    }
+
+    _navigateUp(isSelecting) {
+        if (!isSelecting) {
+            if (this.editPosition.note > 0) {
+                this.editPosition.note--;
                 this.editPosition.position = 0;
             }
-        }
-    }
-
-    _navigateUp() {
-        if ( this.editPosition.note > 0 ) {
-            this.editPosition.note--;
-            this.editPosition.position = 0;
+        } else {
+            this.editPosition.note = this.editPosition.note > 0 ? this.editPosition.note - 1 : 0;
         }
         this._ensureNoteIsVisible(this.editPosition.track, this.editPosition.note);
     }
 
-    _navigateDown() {
-        if ( this.pattern && (this.editPosition.note < this.pattern.getNotesPerTrack()-1) ) {
-            this.editPosition.note++;
-            if ( this.editPosition.position <= 2 )  this.editPosition.position = 0;
-            if ( this.editPosition.position >= 4 && this.editPosition.position <= 5 )   this.editPosition.position = 4;
+    _navigateDown(isSelecting) {
+        if (!isSelecting) {
+            if (this.pattern && (this.editPosition.note < this.pattern.getNotesPerTrack() - 1)) {
+                this.editPosition.note++;
+                if (this.editPosition.position <= 2) this.editPosition.position = 0;
+                if (this.editPosition.position >= 4 && this.editPosition.position <= 5) this.editPosition.position = 4;
+            }
+        } else {
+            this.editPosition.note = this.editPosition.note < this.pattern.getNotesPerTrack() - 1 ? this.editPosition.note + 1 : this.pattern.getNotesPerTrack() - 1;
         }
         this._ensureNoteIsVisible(this.editPosition.track, this.editPosition.note);
     }
+
+    _resetSelection() {
+        console.log('Resetting selection');
+        return {
+            startTrack: -1,
+            endTrack: -1,
+            startNote: -1,
+            endNote: -1
+        };
+    }
+
+    _isSelectionEmpty() {
+        return (
+            this.selection.startNote === -1 &&
+            this.selection.startTrack === -1 &&
+            this.selection.endNote === -1 &&
+            this.selection.endTrack === -1
+        );
+    }
+
+    _addToSelection() {
+        console.log('Adding note to selection');
+        // if we have no selection at the moment, start it...
+        if (this._isSelectionEmpty()) {
+            this.selection.startNote = this.selection.endNote = this.editPosition.note;
+            this.selection.startTrack = this.selection.endTrack = this.editPosition.track;
+        } else {
+            if (this.editPosition.note < this.selection.startNote) {
+                this.selection.startNote = this.editPosition.note;
+            } else if (this.editPosition.note > this.selection.endNote) {
+                this.selection.endNote = this.editPosition.note;
+            } else if (this.editPosition.note < this.selection.endNote) {
+                this.selection.endNote = this.editPosition.note;
+            } else if (this.editPosition.track < this.selection.startTrack) {
+                this.selection.startTrack = this.editPosition.track;
+            } else if (this.editPosition.track > this.selection.endTrack) {
+                this.selection.endTrack = this.editPosition.track;
+            } else if (this.editPosition.track < this.selection.endTrack) {
+                this.selection.endTrack = this.editPosition.track;
+            }
+        }
+
+        console.log(this.selection);
+    }
+
+    _transpose(bySemitones) {
+        if (this._isSelectionEmpty()) {
+            let track = this.pattern.getTrack(this.editPosition.track);
+            for (let note of track.notes) {
+                note ? note.increment(bySemitones) : null;
+            }
+        } else {
+
+        }
+    }
+
 }

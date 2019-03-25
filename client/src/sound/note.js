@@ -26,19 +26,29 @@ export class Note {
     }
 
     increment(semitones) {
-        let numSemitones = semitones || 1;
-        let index = Note.noteNames.indexOf(this.getNoteName());
+        if (semitones) {
+            let index = Note.noteNames.indexOf(this.getNoteName());
 
-        // TODO: Rewrite this so that it actually works
-        if ( index != -1 ) {
-            this.noteName = Note.noteNames[(index + numSemitones) % Note.noteNames.length];
-            if ( this.noteName.length == 2 ) {
-                this.noteName = this.noteName[0];
-                this.isSharp = true;
-            } else {
-                this.isSharp = false;
+            // TODO: Rewrite this so that it actually works
+            if (index != -1) {
+                if (index + semitones < 0) {
+                    index = Note.noteNames.length + (index + semitones);
+                    this.octave -= 1;
+                } else {
+                    if (index + semitones >= Note.noteNames.length) {
+                        this.octave += 1;
+                    }
+                    index = (index + semitones) % Note.noteNames.length;
+                }
+                this.noteName = Note.noteNames[index];
+                if (this.noteName.length == 2) {
+                    this.noteName = this.noteName[0];
+                    this.isSharp = true;
+                } else {
+                    this.isSharp = false;
+                }
+                // this.octave += Math.floor((index + semitones) / Note.noteNames.length);
             }
-            this.octave += Math.floor((index + numSemitones) / Note.noteNames.length);
         }
     }
 

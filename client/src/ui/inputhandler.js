@@ -83,6 +83,9 @@ export class InputHandler {
         }
 
         this.onKeyUp = (e) => {
+            if (ui.focusControl.onKeyUp) {
+                ui.focusControl.onKeyUp(e);
+            } 
         }
 
     }
@@ -103,5 +106,7 @@ InputHandler.KEYS = {
     VK_PLUS: 107,
     VK_MINUS: 109,
     VK_BRACKET_SQUARE_OPEN: 219,
-    VK_BRACKET_SQUARE_CLOSE: 221
+    VK_BRACKET_SQUARE_CLOSE: 221,
+    VK_COMMA: 188,
+    VK_PERIOD: 190,
 }
