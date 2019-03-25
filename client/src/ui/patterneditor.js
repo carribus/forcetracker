@@ -1,5 +1,6 @@
 import { Component } from "./component.js";
 import { InputHandler } from "./inputhandler.js";
+import { Note } from "../sound/note.js";
 
 export class PatternEditor extends Component {
     constructor(display, dimensions) {

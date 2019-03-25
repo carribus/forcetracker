@@ -1,8 +1,8 @@
-#Force Tracker
+# Force Tracker
 
 Force Tracker is an HTML5 Audio Tracker inspired by trackers of yesteryear like Scream Tracker and Impulse Tracker.
 
-##Current Features
+## Current Features
 
 - Sample Import
 - Pattern management
@@ -20,8 +20,11 @@ Force Tracker is an HTML5 Audio Tracker inspired by trackers of yesteryear like 
 - UI
     - Crappy, but functional UI
 
-##TO DO:
+## TO DO:
 
+- Selection actions
+    - Select multiple rows in a track
+    - Select multiple rows across tracks
 - Song serialisation
 - Song deserialisation
 - Backend server
