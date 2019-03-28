@@ -227,8 +227,9 @@ window.addEventListener('load', (e) => {
 
                 reader.onload = function(e) {
                     let data = JSON.parse(e.target.result);
-                    console.log(data);
                     sound.deserialise(data);
+                    ui.controls.playSongButton.disabled =
+                        ui.controls.playPatternButton.disabled = false;
                 }
                 reader.onerror = function(err) {
                     console.error(err);

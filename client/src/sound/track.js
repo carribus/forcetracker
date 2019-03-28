@@ -1,3 +1,5 @@
+import { Note } from "./note.js";
+
 export class Track {
     constructor() {
         this.notes = [];
@@ -45,6 +47,17 @@ export class Track {
                     newNote = note.clone();
                     target.setNote(i, newNote);
                 }
+            }
+        }
+    }
+
+    deserialise(data) {
+        this.maxNotes = data.maxNotes;
+        for (let i = 0; i < data.maxNotes; i++) {
+            if (data.notes[i]) {
+                let n = new Note();
+                n.deserialise(data.notes[i]);
+                this.notes[i] = n;
             }
         }
     }

@@ -108,7 +108,14 @@ export class Pattern {
         return data;
     }
 
-    deserialise() {
-        throw("Not implemented");
+    deserialise(data) {
+        this.notesPerTrack = data.notesPerTrack;
+        this.tempo = data.tempo;
+        for (let track of data.tracks) {
+            let t = new Track();
+            t.deserialise(track);
+            this.tracks.push(t);
+        }
+        // throw ("Not implemented");
     }
 }

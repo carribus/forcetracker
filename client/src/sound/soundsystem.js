@@ -23,6 +23,19 @@ export class SoundSystem {
         }
     }
 
+    clearAll() {
+        this.sampleBank = [];
+        this.patterns = [];
+        console.log(this.trackRoutes);
+        this.stopSample();
+        console.log(this.sampleRoute);
+        this.currentPattern = 0;
+        this.currentNote = 0;
+        this.playing = false;
+        this.playingSong = false;
+        this.lastTick = 0;
+    }
+
     loadSamples(samples, callback) {
         let counter = 0;
         const createRequest = (sample) => {
@@ -37,7 +50,7 @@ export class SoundSystem {
                 let thisSample = this.sample;
                 _this.context.decodeAudioData(this.response, function (buffer) {
                     thisSample.buffer = buffer;
-                    if (thisSample.index) {
+                    if (thisSample.index !== undefined) {
                         _this.sampleBank[thisSample.index] = thisSample;
                     } else {
                         _this.sampleBank.push(thisSample);
@@ -254,6 +267,7 @@ export class SoundSystem {
     }
 
     deserialise(data) {
+        this.clearAll();
         if (data.format === "forcetracker") {
             if (data.version !== "1.0.0") {
                 console.warn(`Expecting format 1.0.0; found ${data.version}. Could lead to unexpected behaviour...`);

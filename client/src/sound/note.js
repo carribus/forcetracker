@@ -66,6 +66,14 @@ export class Note {
 
         return newNote;
     }
+
+    deserialise(data) {
+        this.noteName = data.noteName;
+        this.isSharp = data.isSharp;
+        this.octave = data.octave;
+        this.volume = data.volume;
+        this.sampleID = data.sampleID;
+    }
 }
 
 Note.noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
