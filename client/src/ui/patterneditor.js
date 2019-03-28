@@ -21,6 +21,7 @@ export class PatternEditor extends Component {
             }
         }
         this.colours = {
+            defaultFill: 'rgb(16, 16, 16)',
             defaultText: 'rgb(164, 164, 164)',
             playingNoteText: 'white',
             playingNoteFill: 'rgb(32, 32, 32)',
@@ -31,6 +32,7 @@ export class PatternEditor extends Component {
             emptyNoteText: 'rgb(128, 128, 128)',
             selectedFill: 'rgb(16, 32, 64)',
             selectedText: 'rgb(128, 296, 255)',
+            currentTrackFill: 'rgb(0, 32, 0)',
         }
         this.editPosition = {
             track: 0,
@@ -351,21 +353,21 @@ export class PatternEditor extends Component {
                     offset = j - this.scrollOffset.y;
 
                     // fill the line's background
+                    ctx.fillStyle = this.colours.defaultFill;
+                    if (this.editPosition.track === i) {
+                        ctx.fillStyle = this.colours.currentTrackFill;
+                    } else
                     if ( j == currentNote) {
                         ctx.fillStyle = this.colours.playingNoteFill;
-                        ctx.fillRect(rect.x + i * this.trackWidth, rect.y + offset * this.fonts.note.size, this.trackWidth, this.noteHeight);
-                    }
-
-                    if (selectedNote) {
+                    } else if (selectedNote) {
                         ctx.fillStyle = this.colours.selectedFill;
-                        ctx.fillRect(rect.x + i * this.trackWidth, rect.y + offset * this.fonts.note.size, this.trackWidth, this.noteHeight);
                     } else {
                         // check if the current note in the current track is being edited
                         if (editedNote) {
                             ctx.fillStyle = this.colours.editNoteFill;
-                            ctx.fillRect(rect.x + i * this.trackWidth, rect.y + offset * this.fonts.note.size, this.trackWidth, this.noteHeight);
                         }
                     }
+                    ctx.fillRect(rect.x + i * this.trackWidth, rect.y + offset * this.fonts.note.size, this.trackWidth, this.noteHeight);
 
                     note = track.getNote(j);
                     if ( note ) {

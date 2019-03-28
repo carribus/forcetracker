@@ -7705,14 +7705,7 @@
               "octave": 6,
               "volume": null,
               "sampleID": 9
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+            }
           ],
           "maxNotes": 64
         }
@@ -8656,14 +8649,7 @@
               "octave": 6,
               "volume": null,
               "sampleID": 9
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+            }
           ],
           "maxNotes": 64
         }
@@ -10552,7 +10538,7 @@
             null,
             null,
             {
-              "noteName": "E",
+              "noteName": "G",
               "isSharp": false,
               "octave": 6,
               "volume": null,
