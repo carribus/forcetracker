@@ -107,4 +107,8 @@ export class Pattern {
         }
         return data;
     }
+
+    deserialise() {
+        throw("Not implemented");
+    }
 }

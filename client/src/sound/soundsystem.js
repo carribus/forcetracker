@@ -26,6 +26,7 @@ export class SoundSystem {
     loadSamples(samples, callback) {
         let counter = 0;
         const createRequest = (sample) => {
+            console.log(`Fetching sample: ${sample.filename}`);
             let _this = this;
             let request = new XMLHttpRequest();
             request.responseType = 'arraybuffer';
@@ -36,8 +37,12 @@ export class SoundSystem {
                 let thisSample = this.sample;
                 _this.context.decodeAudioData(this.response, function (buffer) {
                     thisSample.buffer = buffer;
-                    _this.sampleBank.push(thisSample);
-                    thisSample.index = _this.sampleBank.length - 1;
+                    if (thisSample.index) {
+                        _this.sampleBank[thisSample.index] = thisSample;
+                    } else {
+                        _this.sampleBank.push(thisSample);
+                        thisSample.index = _this.sampleBank.length - 1;
+                    }
                     if (++counter == samples.length) {
                         callback(_this.sampleBank);
                     }
@@ -255,17 +260,19 @@ export class SoundSystem {
             }
 
             // load the samples
-            for (let sample of data.samples) {
-                console.log("Loading samples");
-                this.loadSamples(data.samples, () => {
-                    // TODO: You left off here...
-                    console.log("Samples loaded");
-                    // load the patterns
-                    console.log("Loading patterns");
-                    for (let pattern of data.patterns) {
-                    }
-                });
-            }
+            console.log("Loading samples");
+            this.loadSamples(data.samples, () => {
+                // TODO: You left off here...
+                console.log("Samples loaded");
+                // load the patterns
+                console.log("Loading patterns");
+                for (let pattern of data.patterns) {
+                    let p = new Pattern();
+                    p.deserialise(pattern);
+                    this.patterns.push(p);
+                }
+                console.log(this.patterns);
+            });
 
         }
     }
