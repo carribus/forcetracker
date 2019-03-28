@@ -205,13 +205,17 @@ export class SampleList extends Component {
             for ( let j = 0, len = labels.length; j < len; j++ ) {
                 hRect.x = lastX;
                 hRect.w = rect.w * this.headers[j].width;
-                switch ( labels[j] ) {
-                    case    'index':
-                        ctx.fillText(sampleBank[i][labels[j]].toHex(2, true), hRect.x + 5, hRect.y + hRect.h/2);
-                        break;
+                if (sampleBank[i] && sampleBank[i][labels[j]] !== undefined) {
+                    switch ( labels[j] ) {
+                        case    'index':
+                            ctx.fillText(sampleBank[i][labels[j]].toHex(2, true), hRect.x + 5, hRect.y + hRect.h / 2);
+                            break;
 
-                    default:
-                        ctx.fillText(sampleBank[i][labels[j]], hRect.x + 5, hRect.y + hRect.h/2);
+                        default:
+                            ctx.fillText(sampleBank[i][labels[j]], hRect.x + 5, hRect.y + hRect.h/2);
+                    }
+                } else {
+                    console.warn(`i = ${i}, j = ${j}`)
                 }
                 lastX = hRect.x + hRect.w;
             }

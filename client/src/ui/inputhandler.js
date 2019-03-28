@@ -35,7 +35,8 @@ export class InputHandler {
         }
 
         this.onKeyDown = (e) => {
-            console.log('InputHandler: onKeyDown: %s', e.keyCode);
+            e.stopPropagation();
+            console.log(`InputHandler: onKeyDown: ${e.keyCode}, metaKey: ${e.metaKey}, ctrlKey: ${e.ctrlKey}, shiftKey: ${e.shiftKey}, altKey: ${e.altKey}`);
             if ( ui.focusControl ) {
                 switch (e.keyCode) {
                     case    InputHandler.KEYS.VK_SPACE:

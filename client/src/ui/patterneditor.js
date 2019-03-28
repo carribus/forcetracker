@@ -1,6 +1,7 @@
 import { Component } from "./component.js";
 import { InputHandler } from "./inputhandler.js";
 import { Note } from "../sound/note.js";
+import { Track } from "../sound/track.js";
 
 export class PatternEditor extends Component {
     constructor(display, dimensions) {
@@ -120,94 +121,121 @@ export class PatternEditor extends Component {
                 break;
 
             default:
-                switch ( this.editPosition.position ) {
-                    // note and octave
-                    case    0:
-                    case    1:
-                    case    2:
-                        char = String.fromCharCode(e.keyCode);
-
-                        if ( InputHandler.isNoteKey(e.keyCode) ) {
-                            note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
-                            if ( !note ) {
-                                note = new Note(char, e.getModifierState('Shift'), 4, this.lastSampleID);
-                            } else {
-                                note.noteName = char;
-                                note.isSharp = e.getModifierState('Shift');
-                            }
-
-                            this.pattern.setNote(this.editPosition.track, this.editPosition.note, note);
-                        } else if ( "0123456789".indexOf(char) != -1 ) {
-                            note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
-                            if ( note ) {
-                                note.octave = parseInt(char);
-                            }
-                        } else {
-                            note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
-                            if ( note ) {
-                                switch (e.keyCode ) {
-                                    case    107:
-                                    case    187:
-                                        note.increment(1);
-                                        break;
-
-                                    case    109:
-                                    case    189:
-                                        note.increment(-1);
-                                        break;
+                if (!e.ctrlKey) {
+                    switch ( this.editPosition.position ) {
+                        // note and octave
+                        case    0:
+                        case    1:
+                        case    2:
+                            char = String.fromCharCode(e.keyCode);
+    
+                            if ( InputHandler.isNoteKey(e.keyCode) ) {
+                                note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
+                                if ( !note ) {
+                                    note = new Note(char, e.getModifierState('Shift'), 4, this.lastSampleID);
+                                } else {
+                                    note.noteName = char;
+                                    note.isSharp = e.getModifierState('Shift');
                                 }
-                            }
-                        }
-                        break;
-
-                    // volume
-                    case    4:
-                    case    5:
-                        let volume;
-                        
-                        char = String.fromCharCode(e.keyCode);
-
-                        if ( "0123456789ABCDEF".indexOf(char) != -1 ) {
-                            note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
-                            if ( !note ) {
-                                note = new Note(null, false, null, null);
+    
                                 this.pattern.setNote(this.editPosition.track, this.editPosition.note, note);
-                            }
-
-                            if ( note ) {
-                                if ( this.editPosition.position == 4 ) {
-                                    volume = parseInt(char + '0', 16) | note.volume & 0x0F;
-                                    this.editPosition.position++;
-                                } else if ( this.editPosition.position == 5 ) {
-                                    volume = parseInt(char, 16) | note.volume & 0xF0;
+                            } else if ( "0123456789".indexOf(char) != -1 ) {
+                                note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
+                                if ( note ) {
+                                    note.octave = parseInt(char);
                                 }
-                                note.volume = volume;
+                            } else {
+                                note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
+                                if ( note ) {
+                                    switch (e.keyCode ) {
+                                        case    107:
+                                        case    187:
+                                            note.increment(1);
+                                            break;
+    
+                                        case    109:
+                                        case    189:
+                                            note.increment(-1);
+                                            break;
+                                    }
+                                }
                             }
-                        }
-                        break;
-
-                    // sample
-                    case    7:
-                    case    8:
-                        char = String.fromCharCode(e.keyCode);
-                        let sample;
-
-                        if ( '0123456789'.indexOf(char) != -1 ) {
-                            note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
-                            if ( note ) {
-                                if ( this.editPosition.position == 7 ) {
-                                    sample = parseInt(char + '0', 16) | note.sampleID & 0x0F;
-                                } else if ( this.editPosition.position == 8 ) {
-                                    sample = parseInt(char, 16) | note.sampleID & 0xF0;
+                            break;
+    
+                        // volume
+                        case    4:
+                        case    5:
+                            let volume;
+                            
+                            char = String.fromCharCode(e.keyCode);
+    
+                            if ( "0123456789ABCDEF".indexOf(char) != -1 ) {
+                                note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
+                                if ( !note ) {
+                                    note = new Note(null, false, null, null);
+                                    this.pattern.setNote(this.editPosition.track, this.editPosition.note, note);
+                                }
+    
+                                if ( note ) {
+                                    if ( this.editPosition.position == 4 ) {
+                                        volume = parseInt(char + '0', 16) | note.volume & 0x0F;
+                                        this.editPosition.position++;
+                                    } else if ( this.editPosition.position == 5 ) {
+                                        volume = parseInt(char, 16) | note.volume & 0xF0;
+                                    }
+                                    note.volume = volume;
+                                }
+                            }
+                            break;
+    
+                        // sample
+                        case    7:
+                        case    8:
+                            char = String.fromCharCode(e.keyCode);
+                            let sample;
+    
+                            if ( '0123456789'.indexOf(char) != -1 ) {
+                                note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
+                                if ( note ) {
+                                    if ( this.editPosition.position == 7 ) {
+                                        sample = parseInt(char + '0', 16) | note.sampleID & 0x0F;
+                                    } else if ( this.editPosition.position == 8 ) {
+                                        sample = parseInt(char, 16) | note.sampleID & 0xF0;
+                                        this.editPosition.position++;
+                                    }
+                                    this.lastSampleID = note.sampleID = sample;
                                     this.editPosition.position++;
                                 }
-                                this.lastSampleID = note.sampleID = sample;
-                                this.editPosition.position++;
                             }
-                        }
-                        break;
+                            break;
+                    }
+                    break;
+                } else {
+                    switch (e.keyCode) {
+                        case 65: // A
+                            if (e.ctrlKey) {
+                                // select the current track
+                                this.selection = this._resetSelection();
+                                this.selection.startTrack = this.selection.endTrack = this.editPosition.track;
+                                this.selection.startNote = 0;
+                                this.selection.endNote = this.pattern.getTrack(this.editPosition.track).maxNotes - 1;
+                            }
+                            break;
+
+                        case 68: // D
+                            if (e.ctrlKey) {
+                                // duplicate the current track
+                                if (this.pattern) {
+                                    let track = new Track();
+                                    track.deserialise(this.pattern.tracks[this.editPosition.track]);
+                                    this.pattern.tracks.push(track);
+                                }
+                            }
+
+                        default:
+                            break;
+                    }
                 }
-                break;
         }
     }
 

@@ -116,6 +116,5 @@ export class Pattern {
             t.deserialise(track);
             this.tracks.push(t);
         }
-        // throw ("Not implemented");
     }
 }
