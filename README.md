@@ -19,14 +19,15 @@ Force Tracker is an HTML5 Audio Tracker inspired by trackers of yesteryear like 
     - Patterns -> Track -> Note hierarchical system
 - UI
     - Crappy, but functional UI
+    - Selection actions
+        - Select multiple rows in a track
+        - Select multiple rows across tracks
+- Serialisation
+    - Song serialisation (saving)
+    - Song deserialisation (loading)
 
 ## TO DO:
 
-- Selection actions
-    - Select multiple rows in a track
-    - Select multiple rows across tracks
-- Song serialisation
-- Song deserialisation
 - Backend server
 - Better skin
 - Pattern sequence management
