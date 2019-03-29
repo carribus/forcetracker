@@ -76,7 +76,23 @@ export class PatternEditor extends Component {
             this.selection = this._resetSelection();
         }
 
+        const ROWS_FOR_PAGEUPDOWN = 16;
+
         switch (e.keyCode) {
+            case    InputHandler.KEYS.VK_PAGEDOWN:
+                this.editPosition.note = this.editPosition.note + ROWS_FOR_PAGEUPDOWN >= this.pattern.getNotesPerTrack() ? 
+                    this.pattern.getNotesPerTrack()-1 : 
+                    this.editPosition.note + ROWS_FOR_PAGEUPDOWN;
+                this._ensureNoteIsVisible(this.editPosition.track, this.editPosition.note);
+                break;
+
+            case    InputHandler.KEYS.VK_PAGEUP:
+                this.editPosition.note = this.editPosition.note - ROWS_FOR_PAGEUPDOWN >= 0 ? 
+                    this.editPosition.note - ROWS_FOR_PAGEUPDOWN : 
+                    0;
+                this._ensureNoteIsVisible(this.editPosition.track, this.editPosition.note);
+                break;
+
             case    InputHandler.KEYS.VK_LEFT:
                 this._navigateLeft(e.shiftKey);
                 if (e.shiftKey) {

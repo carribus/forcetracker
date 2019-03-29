@@ -35,8 +35,7 @@ export class InputHandler {
         }
 
         this.onKeyDown = (e) => {
-            e.stopPropagation();
-            console.log(`InputHandler: onKeyDown: ${e.keyCode}, metaKey: ${e.metaKey}, ctrlKey: ${e.ctrlKey}, shiftKey: ${e.shiftKey}, altKey: ${e.altKey}`);
+            console.log(`InputHandler: onKeyDown: ${e.keyCode}, metaKey: ${e.metaKey}, ctrlKey: ${e.ctrlKey}, shiftKey: ${e.shiftKey}, altKey: ${e.altKey}, key: ${e.key}`);
             if ( ui.focusControl ) {
                 switch (e.keyCode) {
                     case    InputHandler.KEYS.VK_SPACE:
@@ -110,4 +109,6 @@ InputHandler.KEYS = {
     VK_BRACKET_SQUARE_CLOSE: 221,
     VK_COMMA: 188,
     VK_PERIOD: 190,
+    VK_PAGEUP: 33,
+    VK_PAGEDOWN: 34,
 }
