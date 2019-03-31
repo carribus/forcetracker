@@ -3,6 +3,9 @@ import { InputHandler } from "./inputhandler.js";
 import { Note } from "../sound/note.js";
 import { Track } from "../sound/track.js";
 
+const VALID_INPUT_CHARS = "1234567890ABCDEF"
+const NOTE_LABEL_WIDTH = 30;
+
 export class PatternEditor extends Component {
     constructor(display, dimensions) {
         super(display, dimensions);
@@ -50,7 +53,7 @@ export class PatternEditor extends Component {
      */
     onClick(x, y) {
         console.log('Pattern Editor clicked');
-        let trackNumber = Math.floor((x - this.rect.x) / this.trackWidth);
+        let trackNumber = Math.floor((x - (this.rect.x)) / this.trackWidth);
         let noteNumber = this.scrollOffset.y + Math.floor((y - this.rect.y) / this.noteHeight);
 
         console.log('Click: Track %s, Note %s', trackNumber, noteNumber);
@@ -123,7 +126,11 @@ export class PatternEditor extends Component {
 
             case    InputHandler.KEYS.VK_DELETE:
             case    InputHandler.KEYS.VK_MINUS:
-                this.pattern.deleteNote(this.editPosition.track, this.editPosition.note, e.getModifierState('Control'));
+                if (!this._isSelectionEmpty()) {
+                    this.pattern.deleteNote(this.editPosition.track, this.editPosition.note, e.getModifierState('Control'));
+                } else {
+                    this.pattern.deleteNotes(this.selection.startTrack, this.selection.endTrack, this.selection.startNote, this.selection.endNote);
+                }
                 break;
 
             case    InputHandler.KEYS.VK_PLUS:
@@ -157,7 +164,7 @@ export class PatternEditor extends Component {
                                 }
     
                                 this.pattern.setNote(this.editPosition.track, this.editPosition.note, note);
-                            } else if ( "0123456789".indexOf(char) != -1 ) {
+                            } else if ( VALID_INPUT_CHARS.indexOf(char) != -1 ) {
                                 note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
                                 if ( note ) {
                                     note.octave = parseInt(char);
@@ -187,7 +194,7 @@ export class PatternEditor extends Component {
                             
                             char = String.fromCharCode(e.keyCode);
     
-                            if ( "0123456789ABCDEF".indexOf(char) != -1 ) {
+                            if ( VALID_INPUT_CHARS.indexOf(char) != -1 ) {
                                 note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
                                 if ( !note ) {
                                     note = new Note(null, false, null, null);
@@ -212,7 +219,7 @@ export class PatternEditor extends Component {
                             char = String.fromCharCode(e.keyCode);
                             let sample;
     
-                            if ( '0123456789'.indexOf(char) != -1 ) {
+                            if ( VALID_INPUT_CHARS.indexOf(char) != -1 ) {
                                 note = this.pattern.getNote(this.editPosition.track, this.editPosition.note);
                                 if ( note ) {
                                     if ( this.editPosition.position == 7 ) {
@@ -294,12 +301,49 @@ export class PatternEditor extends Component {
             ctx = this.display.context;
             this.rect = rect = this.calcRect();
 
+            ctx.strokeStyle = 'rgb(255, 255, 255)';
+            ctx.strokeRect(rect.x, rect.y, rect.w, rect.h); 
+
             ctx.save();
 
-            this._drawPattern(ctx, rect, pattern, currentNote, isPlaying);
+            if (this.pattern) {
+                this._drawBorders(ctx, rect, pattern, currentNote);
+                rect.x += NOTE_LABEL_WIDTH;
+                this._drawPattern(ctx, rect, pattern, currentNote, isPlaying);
+            }
 
             ctx.restore();
 
+        }
+    }
+
+    _drawBorders(ctx, rect, pattern, currentNote) {
+        let notesPerTrack = pattern.getNotesPerTrack();
+        let offset = 0;
+        let rowLabel;
+
+        ctx.strokeStyle = 'rgb(128, 128, 128)';
+        ctx.lineWidth = 0.5;
+        ctx.fillStyle = 'rgb(16, 16, 16)';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        ctx.font = this.fonts.note.size + 'px' + ' ' + this.fonts.note.name + ' ';
+        ctx.fillRect(rect.x, rect.y, NOTE_LABEL_WIDTH, rect.h);
+        ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
+
+        for (let i = 0; i < notesPerTrack; i++) {
+            if (i < this.scrollOffset.y) continue;
+
+            offset = i - this.scrollOffset.y;
+
+            ctx.fillStyle = this.colours.defaultText;
+
+            rowLabel = i.toHex(2, true);
+            ctx.fillText(rowLabel, rect.x + 5, rect.y + offset * this.fonts.note.size);
+
+            if (rect.y + offset * this.fonts.note.size + this.fonts.note.size * 2 >= rect.y + rect.h) {
+                break;
+            }
         }
     }
 
@@ -370,13 +414,12 @@ export class PatternEditor extends Component {
 
                     // fill the line's background
                     ctx.fillStyle = this.colours.defaultFill;
-                    if (this.editPosition.track === i) {
-                        ctx.fillStyle = this.colours.currentTrackFill;
-                    } else
-                    if ( j == currentNote) {
-                        ctx.fillStyle = this.colours.playingNoteFill;
-                    } else if (selectedNote) {
+                    if (selectedNote) {
                         ctx.fillStyle = this.colours.selectedFill;
+                    } else if (this.editPosition.track === i) {
+                        ctx.fillStyle = this.colours.currentTrackFill;
+                    } else if ( j == currentNote) {
+                        ctx.fillStyle = this.colours.playingNoteFill;
                     } else {
                         // check if the current note in the current track is being edited
                         if (editedNote) {

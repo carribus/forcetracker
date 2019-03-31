@@ -79,6 +79,18 @@ export class Pattern {
         }
     }
 
+    deleteNotes(trackStart, trackEnd, noteStart, noteEnd) {
+        let track;
+        for (let t = trackStart; t <= trackEnd; t++) {
+            track = this.getTrack(t);
+            if (track) {
+                for (let n = noteStart; n <= noteEnd; n++) {
+                        track.deleteNote(n, false);
+                }
+            }
+        }
+    }
+
     insertNote(trackIndex, noteIndex) {
         let track = this.getTrack(trackIndex);
 

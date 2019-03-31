@@ -1,7 +1,7 @@
 {
   "format": "forcetracker",
   "version": "1.0.0",
-  "numPatterns": 13,
+  "numPatterns": 15,
   "samples": [
     {
       "name": "hihat_closed",
@@ -10544,6 +10544,2116 @@
               "volume": null,
               "sampleID": 9
             }
+          ],
+          "maxNotes": 64
+        }
+      ]
+    },
+    {
+      "notesPerTrack": 64,
+      "tempo": 125,
+      "tracks": [
+        {
+          "notes": [
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 2
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 2
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 2
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 2
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            {
+              "noteName": "F",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 8
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "F",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 8
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "F",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 8
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 8
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 8
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 8
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "F",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "F",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "F",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "F",
+              "isSharp": true,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "F",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "F",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "F",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            {
+              "noteName": "A",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "D",
+              "isSharp": false,
+              "octave": 6,
+              "volume": null,
+              "sampleID": 9
+            },
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 6,
+              "volume": null,
+              "sampleID": 9
+            },
+            null,
+            {
+              "noteName": "D",
+              "isSharp": false,
+              "octave": 6,
+              "volume": null,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "D",
+              "isSharp": false,
+              "octave": 6,
+              "volume": null,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 6,
+              "volume": null,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "F",
+              "isSharp": false,
+              "octave": 6,
+              "volume": null,
+              "sampleID": 9
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            null,
+            null,
+            {
+              "noteName": "A",
+              "isSharp": false,
+              "octave": 5,
+              "volume": 128,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "D",
+              "isSharp": false,
+              "octave": 6,
+              "volume": 128,
+              "sampleID": 9
+            },
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 6,
+              "volume": 128,
+              "sampleID": 9
+            },
+            null,
+            {
+              "noteName": "D",
+              "isSharp": false,
+              "octave": 6,
+              "volume": 128,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "D",
+              "isSharp": false,
+              "octave": 6,
+              "volume": 128,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 6,
+              "volume": 128,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "F",
+              "isSharp": false,
+              "octave": 6,
+              "volume": 128,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "maxNotes": 64
+        }
+      ]
+    },
+    {
+      "notesPerTrack": 64,
+      "tempo": 125,
+      "tracks": [
+        {
+          "notes": [
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 3
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            },
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 5,
+              "volume": null,
+              "sampleID": 0
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 6
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 2
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 2
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 2
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "C",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 2
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            {
+              "noteName": "A",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 8
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "A",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 8
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "A",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 8
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "A",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 8
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "A",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 8
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "A",
+              "isSharp": false,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 8
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 4,
+              "volume": null,
+              "sampleID": 7
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": true,
+              "octave": 3,
+              "volume": null,
+              "sampleID": 7
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 6,
+              "volume": null,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 6,
+              "volume": null,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 6,
+              "volume": null,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 6,
+              "volume": null,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "F",
+              "isSharp": false,
+              "octave": 6,
+              "volume": null,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": false,
+              "octave": 6,
+              "volume": null,
+              "sampleID": 9
+            }
+          ],
+          "maxNotes": 64
+        },
+        {
+          "notes": [
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 6,
+              "volume": 128,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 6,
+              "volume": 128,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 6,
+              "volume": 128,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "E",
+              "isSharp": false,
+              "octave": 6,
+              "volume": 128,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            {
+              "noteName": "F",
+              "isSharp": false,
+              "octave": 6,
+              "volume": 128,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "noteName": "G",
+              "isSharp": false,
+              "octave": 6,
+              "volume": 128,
+              "sampleID": 9
+            },
+            null,
+            null,
+            null,
+            null,
+            null
           ],
           "maxNotes": 64
         }
