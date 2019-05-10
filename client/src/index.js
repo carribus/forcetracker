@@ -40,6 +40,11 @@ window.addEventListener('load', (e) => {
         console.log('Sound System created:\n' +
             '\tSample Rate: %s', sound.context.sampleRate);
 
+        createPattern();
+        sound.setCurrentPattern(0);
+        ui.controls.playSongButton.disabled =
+            ui.controls.playPatternButton.disabled = false;
+
         // sound.loadSamples([
         //     { name: 'kick', filename: 'samples/kick.wav' },
         //     { name: 'cymbal', filename: 'samples/cymbal.wav' },
@@ -90,7 +95,7 @@ window.addEventListener('load', (e) => {
         pattern.setNotesPerTrack(64);
         pattern.setTrackCount(4);
         pattern.setTempo(125);
-
+/*
         // bass drum track
         sample = sound.getSample('kick');
         track = pattern.getTrack(0);
@@ -118,7 +123,7 @@ window.addEventListener('load', (e) => {
         for (i = 8; i < pattern.getNotesPerTrack(); i += 16) {
             track.setNote(i, new Note('C', false, 3, sample.index));
         }
-
+*/
         sound.addPattern(pattern);
     }
 

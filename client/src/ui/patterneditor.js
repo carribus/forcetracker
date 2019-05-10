@@ -126,7 +126,7 @@ export class PatternEditor extends Component {
 
             case    InputHandler.KEYS.VK_DELETE:
             case    InputHandler.KEYS.VK_MINUS:
-                if (!this._isSelectionEmpty()) {
+                if (this._isSelectionEmpty()) {
                     this.pattern.deleteNote(this.editPosition.track, this.editPosition.note, e.getModifierState('Control'));
                 } else {
                     this.pattern.deleteNotes(this.selection.startTrack, this.selection.endTrack, this.selection.startNote, this.selection.endNote);
